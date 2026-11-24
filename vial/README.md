@@ -8,6 +8,11 @@ there.
 |---|---|
 | `cornix-miryoku-qwerty.vil` | 10 Miryoku layers, QWERTY base |
 | `cornix-miryoku-colemakdh.vil` | 10 Miryoku layers, Colemak Mod-DH base |
+
+Shipped options: outer columns empty, **Cmd/Control swapped** (macOS: Command on
+the middle finger, Control on the pinkie) and the **vim-style Nav layer**
+(`MIRYOKU_NAV_VI`: arrows on the home row next to the centre, paging on the row
+below). Shortcut combos such as `LGUI(KC_C)` are untouched - they stay Cmd.
 | `make_miryoku_vil.py` | generator (translates Miryoku ZMK layer definitions to Vial keycodes) |
 | `vial_names.txt` | Vial keycode names, used for offline validation |
 | `miryoku_layer_alternatives.h` | vendored from [miryoku_zmk](https://github.com/manna-harbour/miryoku_zmk) (MIT), the source of the 10 layer definitions |
@@ -61,9 +66,16 @@ already reports 10 layers, so no firmware change is needed.
 ## Regenerate
 
 ```bash
-python3 make_miryoku_vil.py --alphas colemakdh --template ~/Downloads/a.vil \
-        -o cornix-miryoku-colemakdh.vil
-python3 make_miryoku_vil.py --alphas qwerty --drop outer      # pinkie column unused instead
+# exactly what was shipped
+python3 make_miryoku_vil.py --alphas qwerty --swap gui,ctrl --nav vi \
+        --template ~/Downloads/a.vil -o cornix-miryoku-qwerty.vil
+
+# variations
+python3 make_miryoku_vil.py --alphas colemakdh --swap gui,ctrl --nav vi
+python3 make_miryoku_vil.py --alphas qwerty                      # default Miryoku mods/nav
+python3 make_miryoku_vil.py --alphas qwerty --swap gui,lsft      # Command on the index finger
+python3 make_miryoku_vil.py --alphas qwerty --nav invertedt --mouse vi
+python3 make_miryoku_vil.py --alphas qwerty --drop inner         # empty the centre columns
 python3 make_miryoku_vil.py --alphas qwerty --encoder-clicks none,none
 ```
 

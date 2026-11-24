@@ -14,9 +14,9 @@
    ],
    [
     "KC_NO",
-    "LGUI_T(KC_A)",
+    "LCTL_T(KC_A)",
     "LALT_T(KC_R)",
-    "LCTL_T(KC_S)",
+    "LGUI_T(KC_S)",
     "LSFT_T(KC_T)",
     "KC_G",
     -1
@@ -50,9 +50,9 @@
    ],
    [
     "KC_NO",
-    "LGUI_T(KC_O)",
+    "LCTL_T(KC_O)",
     "LALT_T(KC_I)",
-    "LCTL_T(KC_E)",
+    "LGUI_T(KC_E)",
     "LSFT_T(KC_N)",
     "KC_M",
     "KC_BTN3"
@@ -88,9 +88,9 @@
    ],
    [
     "KC_NO",
-    "LGUI_T(KC_A)",
+    "LCTL_T(KC_A)",
     "LALT_T(KC_R)",
-    "LCTL_T(KC_S)",
+    "LGUI_T(KC_S)",
     "LSFT_T(KC_T)",
     "KC_G",
     -1
@@ -124,9 +124,9 @@
    ],
    [
     "KC_NO",
-    "LGUI_T(KC_O)",
+    "LCTL_T(KC_O)",
     "LALT_T(KC_I)",
-    "LCTL_T(KC_E)",
+    "LGUI_T(KC_E)",
     "LSFT_T(KC_N)",
     "KC_M",
     "KC_BTN3"
@@ -236,9 +236,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     -1
@@ -272,9 +272,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     "KC_BTN3"
@@ -310,9 +310,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     -1
@@ -346,20 +346,20 @@
    ],
    [
     "KC_NO",
+    "CW_TOGG",
     "KC_RIGHT",
     "KC_UP",
     "KC_DOWN",
     "KC_LEFT",
-    "CW_TOGG",
     "KC_BTN3"
    ],
    [
     "KC_NO",
+    "KC_INS",
     "KC_END",
     "KC_PGUP",
     "KC_PGDN",
     "KC_HOME",
-    "KC_INS",
     -1
    ],
    [
@@ -384,9 +384,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     -1
@@ -458,9 +458,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     -1
@@ -568,9 +568,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     "KC_BTN3"
@@ -642,9 +642,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     "KC_BTN3"
@@ -716,9 +716,9 @@
    ],
    [
     "KC_NO",
-    "KC_LGUI",
-    "KC_LALT",
     "KC_LCTL",
+    "KC_LALT",
+    "KC_LGUI",
     "KC_LSFT",
     "KC_NO",
     "KC_BTN3"

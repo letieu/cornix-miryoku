@@ -14,6 +14,7 @@ keys are KC_NO too; assign them in Vial if you want them.
 
 Usage:
     python3 make_miryoku_vil.py --alphas qwerty -o cornix-miryoku-qwerty.vil
+    python3 make_miryoku_vil.py --alphas qwerty --swap gui,ctrl -o out.vil
     python3 make_miryoku_vil.py --alphas colemakdh -o cornix-miryoku-colemakdh.vil
 
     # keep your own uid/settings/encoders: pass an export from Vial
@@ -89,6 +90,14 @@ CLIPBOARD = {
     "U_PST": "LGUI(KC_V)",
     "U_RDO": "LGUI(LSFT(KC_Z))",
 }
+
+# Home-row modifier swap: --swap gui,ctrl moves the macOS Command key from the
+# pinkie column to the middle-finger column and Control to the pinkie.
+SWAP_NAMES = {"lctl": "LCTL", "lalt": "LALT", "lgui": "LGUI", "lsft": "LSFT",
+              "rctl": "RCTL", "ralt": "RALT", "rgui": "RGUI", "rsft": "RSFT"}
+SWAP_ALIASES = {"ctrl": "lctl", "control": "lctl", "cmd": "lgui", "command": "lgui",
+                "gui": "lgui", "super": "lgui", "win": "lgui", "alt": "lalt",
+                "opt": "lalt", "option": "lalt", "shift": "lsft", "sft": "lsft"}
 
 MISC = {
     "U_NA": "KC_NO", "U_NU": "KC_NO", "U_NP": "KC_NO",
@@ -216,7 +225,13 @@ def place(keys40, drop="outer"):
     return grid
 
 
-def build_layers(alt, alphas, drop):
+def alt_name(base, variant):
+    """MIRYOKU_ALTERNATIVES_<base>[_<variant>], 'default' picks the plain macro."""
+    variant = (variant or "default").upper()
+    return base if variant == "DEFAULT" else "%s_%s" % (base, variant)
+
+
+def build_layers(alt, alphas, drop, nav="default", mouse="default"):
     base = translate(alt["MIRYOKU_ALTERNATIVES_BASE_" + alphas])
     # miryoku_zmk defines EXTRA as the same alphas with empty thumbs
     extra = list(base)
@@ -227,8 +242,8 @@ def build_layers(alt, alphas, drop):
         "EXTRA": extra,
         "TAP": translate(alt["MIRYOKU_ALTERNATIVES_TAP_" + alphas]),
         "BUTTON": translate(alt["MIRYOKU_ALTERNATIVES_BUTTON"]),
-        "NAV": translate(alt["MIRYOKU_ALTERNATIVES_NAV"]),
-        "MOUSE": translate(alt["MIRYOKU_ALTERNATIVES_MOUSE"]),
+        "NAV": translate(alt[alt_name("MIRYOKU_ALTERNATIVES_NAV", nav)]),
+        "MOUSE": translate(alt[alt_name("MIRYOKU_ALTERNATIVES_MOUSE", mouse)]),
         "MEDIA": translate(alt["MIRYOKU_ALTERNATIVES_MEDIA"]),
         "NUM": translate(alt["MIRYOKU_ALTERNATIVES_NUM"]),
         "SYM": translate(alt["MIRYOKU_ALTERNATIVES_SYM"]),
@@ -251,6 +266,34 @@ def build_layers(alt, alphas, drop):
             layer.append(row)
         layers.append(layer)
     return layers
+
+
+def make_swapper(pair):
+    """Swap two modifiers in mod-tap and standalone-mod keycodes.
+
+    Modded keycodes such as LGUI(KC_C) are left untouched: those are shortcut
+    combos (Cmd+C), not the position of the modifier.
+    """
+    if not pair:
+        return lambda code: code
+    def norm(x):
+        x = x.strip().lower()
+        return SWAP_NAMES[SWAP_ALIASES.get(x, x)]
+
+    a, b = [norm(x) for x in pair.split(",")]
+
+    def swap(code):
+        if code == "KC_" + a:
+            return "KC_" + b
+        if code == "KC_" + b:
+            return "KC_" + a
+        for src, dst in ((a, b), (b, a)):
+            m = re.fullmatch(src + r"_T\((.*)\)", code)
+            if m:
+                return "%s_T(%s)" % (dst, m.group(1))
+        return code
+
+    return swap
 
 
 # --- validation -------------------------------------------------------------
@@ -285,6 +328,15 @@ def main():
     ap.add_argument("--headers", type=Path, help="path to miryoku_layer_alternatives.h")
     ap.add_argument("--template", type=Path,
                     help="existing .vil keeping uid/settings/encoders (e.g. your own export)")
+    ap.add_argument("--nav", default="default", choices=["default", "vi", "invertedt"],
+                    help="Nav layer flavour: 'vi' keeps arrows on the home row next to the"
+                         " centre (vim hjkl muscle memory), 'invertedt' swaps arrows/paging")
+    ap.add_argument("--mouse", default="default", choices=["default", "vi", "invertedt"],
+                    help="Mouse layer flavour, same choices as --nav")
+    ap.add_argument("--swap", metavar="MOD1,MOD2",
+                    help="swap two modifiers on the home row and layer mod clusters,"
+                         " e.g. 'gui,ctrl' to put Cmd under the middle finger on macOS;"
+                         " accepts gui/ctrl/alt/shift with optional l/r prefix")
     ap.add_argument("--encoder-clicks", default="KC_MUTE,KC_BTN3",
                     help="keycodes for the two encoder push buttons, 'x,y' (default: KC_MUTE,KC_BTN3);"
                          " use 'none,none' to leave them empty")
@@ -303,7 +355,10 @@ def main():
 
     alt = parse_layers(headers)
     alphas = args.alphas.upper()
-    layers = build_layers(alt, alphas, args.drop)
+    layers = build_layers(alt, alphas, args.drop, args.nav, args.mouse)
+    swap = make_swapper(args.swap)
+    layers = [[[swap(k) if isinstance(k, str) else k for k in row] for row in layer]
+              for layer in layers]
 
     clicks = [x.strip() for x in args.encoder_clicks.split(",")]
     if len(clicks) != len(ENCODER_KEYS):
