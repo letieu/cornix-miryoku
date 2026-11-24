@@ -63,6 +63,7 @@ skill at `~/code/personal/cornix-miryoku`.
 | `--swap gui,ctrl` | swap two modifiers in mod-taps and standalone mods; accepts `gui/ctrl/alt/shift`, `cmd`, `opt`, `l/r` prefixes. Modded shortcuts `LGUI(KC_C)` are never swapped |
 | `--nav vi\|invertedt`, `--mouse vi\|invertedt` | alternate Miryoku nav/mouse layers (`MIRYOKU_NAV_VI` = vim style) |
 | `--hrm-tune` / `--no-hrm-tune` | write the tuned home-row-mod settings (default on) |
+| `--mouse-tune` / `--no-mouse-tune` | write the faster mouse-key settings (delay 40, interval 14, step 7, max speed 4x, wheel 40/50) and put `KC_ACL0/1/2` on the MOUSE layer's left thumbs (default on) |
 | `--encoder-clicks KC_MUTE,KC_BTN3` | encoder push buttons on every layer |
 | `--template <vil>` | reuse `uid`, settings, encoders, macros, tap-dance, combos |
 | `-o <out.vil>` | output path |
@@ -78,6 +79,9 @@ the mapping to `KEYS`/`MISC`/`CLIPBOARD` in the script.
 - Layer **numbering matters**: Miryoku's `LT<n>()`/`TO(n)` reference
   `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`.
   Insert/remove a layer and every layer-tap pointer moves.
+- Mouse speed lives in the QMK settings (ids 9-17) **and** in `KC_ACL0/1/2` keys:
+  ACL2 doubles RMK's step, ACL0 cuts it to ~a quarter. If the settings ids are
+  ignored by the firmware build, the ACL keys still work.
 - `--nav vi` without `--mouse vi` leaves the mouse keys one column outward from
   the arrows (the user noticed immediately); always pass both.
 - The dead column is **deliberate** (user preference, outer columns). Do not

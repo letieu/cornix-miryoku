@@ -59,6 +59,32 @@ HRM_SETTINGS = {
     QSID_CHORDAL_HOLD: 1,              # keep: same-hand roll counts as a tap
 }
 
+# Mouse-key tuning (RMK MouseKeyConfig defaults are quite slow: 5 px every 20 ms
+# after a 100 ms delay). ids follow the same QMK-settings list as above.
+QSID_MOUSE_DELAY = "9"
+QSID_MOUSE_INTERVAL = "10"
+QSID_MOUSE_STEP = "11"
+QSID_MOUSE_MAX_SPEED = "12"
+QSID_MOUSE_TIME_TO_MAX = "13"
+QSID_WHEEL_DELAY = "14"
+QSID_WHEEL_INTERVAL = "15"
+QSID_WHEEL_TIME_TO_MAX = "17"
+
+MOUSE_SETTINGS = {
+    QSID_MOUSE_DELAY: 40,        # 100 -> 40 ms: pointer starts moving sooner
+    QSID_MOUSE_INTERVAL: 14,     # 20 -> 14 ms between movement reports
+    QSID_MOUSE_STEP: 7,          # 5 -> 7 px per report (~2x default speed)
+    QSID_MOUSE_MAX_SPEED: 4,     # 3 -> 4x accelerated top speed
+    QSID_MOUSE_TIME_TO_MAX: 30,  # 50 -> 30 ticks to reach top speed
+    QSID_WHEEL_DELAY: 50,        # 100 -> 50 ms
+    QSID_WHEEL_INTERVAL: 40,     # 80 -> 40 ms between wheel reports
+    QSID_WHEEL_TIME_TO_MAX: 15,
+}
+
+# Speed modifier keys on the MOUSE layer (RMK: ACL2 doubles the step, ACL0 cuts
+# it to roughly a quarter): held with the left thumb while the right hand moves.
+MOUSE_ACCEL_KEYS = {(3, 3): "KC_ACL0", (3, 4): "KC_ACL1", (3, 5): "KC_ACL2"}
+
 # Miryoku layer order, must match U_BASE..U_FUN in miryoku_layer_list.h
 LAYER_ORDER = ["BASE", "EXTRA", "TAP", "BUTTON", "NAV", "MOUSE", "MEDIA",
                "NUM", "SYM", "FUN"]
@@ -357,6 +383,9 @@ def main():
                     help="swap two modifiers on the home row and layer mod clusters,"
                          " e.g. 'gui,ctrl' to put Cmd under the middle finger on macOS;"
                          " accepts gui/ctrl/alt/shift with optional l/r prefix")
+    ap.add_argument("--no-mouse-tune", dest="mouse_tune", action="store_false",
+                    help="keep the template's mouse-key speed settings and do not add the"
+                         " mouse acceleration keys to the MOUSE layer")
     ap.add_argument("--no-hrm-tune", dest="hrm_tune", action="store_false",
                     help="keep the tapping/flow-tap values from the template instead of"
                          " the tuned home-row-mod preset")
@@ -414,6 +443,11 @@ def main():
     if args.hrm_tune:
         settings = template.setdefault("settings", {})
         settings.update(HRM_SETTINGS)
+    if args.mouse_tune:
+        settings = template.setdefault("settings", {})
+        settings.update(MOUSE_SETTINGS)
+        for (r, c), code in MOUSE_ACCEL_KEYS.items():
+            layers[LAYER_INDEX["MOUSE"]][r][c] = code
 
     bad = validate(layers, HERE / "vial_names.txt")
     if bad:

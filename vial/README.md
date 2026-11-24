@@ -69,6 +69,15 @@ the single dial that matters. Note that Chordal Hold / Flow Tap only do somethin
 if the installed RMK build implements them - if the keyboard ignores them, the
 tapping term is still applied.
 
+## Mouse keys
+
+RMK's stock mouse tuning is slow (5 px per 20 ms after a 100 ms delay), so the
+files carry a faster preset: delay 40 ms, interval 14 ms, step 7 px, top speed
+4x, wheel 50 ms / 40 ms. On the MOUSE layer the three left thumbs switch the
+acceleration level on the fly - `KC_ACL0` (slow) `KC_ACL1` `KC_ACL2` (double
+speed) - which works even if the firmware ignores the settings ids. Disable with
+`--no-mouse-tune`.
+
 ## Known gaps (nothing fatal, all fixable in the Vial UI)
 
 - Miryoku's `&bt` / output-toggle keys are `KC_NO`: RMK's custom keycodes come

@@ -17,6 +17,9 @@ from pathlib import Path
 NAMES = ["BASE", "EXTRA", "TAP", "BUTTON", "NAV", "MOUSE", "MEDIA", "NUM", "SYM", "FUN"]
 SETTING_NAMES = {
     "2": "combo term", "6": "one-shot timeout", "7": "TAPPING TERM",
+    "9": "mouse delay", "10": "mouse interval", "11": "MOUSE STEP",
+    "12": "mouse max speed", "13": "mouse ticks to max", "14": "wheel delay",
+    "15": "wheel interval", "16": "wheel max steps", "17": "wheel ticks to max",
     "18": "tap code delay", "19": "tap hold caps delay", "22": "PERMISSIVE HOLD",
     "23": "HOLD ON OTHER KEY PRESS", "25": "quick tap term", "26": "CHORDAL HOLD",
     "27": "FLOW TAP",
