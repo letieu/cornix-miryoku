@@ -6,8 +6,10 @@ same keycode grid as the firmware's vial.json (here: 8 rows x 7 cols, as shipped
 with the Cornix RMK firmware), otherwise Vial mis-maps keys.
 
 Miryoku is 36 keys (3x5+3). The Cornix has 6 main columns per half, so one
-column per hand is left as KC_NO (`--drop inner` by default, `--drop outer` for
-the pinkie column instead). Palm keys, the two inner keys and the encoder push
+column per hand is left as KC_NO. By default (`--drop outer`) that is the outer
+column of each half - the leftmost and rightmost column of the keyboard - so the
+middle of the board stays fully usable. `--drop inner` empties the columns next
+to the centre gap instead. Palm keys, the two inner keys and the encoder push
 keys are KC_NO too; assign them in Vial if you want them.
 
 Usage:
@@ -197,10 +199,11 @@ def translate(tokens):
 # The Cornix matrix columns run outer -> inner on the left (0..5) and
 # inner -> outer on the right (5..0), thumbs sit at columns 3,4,5.
 
-def place(keys40, drop="inner"):
+def place(keys40, drop="outer"):
     """Place Miryoku's 40 args into the Cornix 8x7 grid."""
     grid = {}
-    off = 0 if drop == "inner" else 1   # innermost column stays empty by default
+    # leave either the innermost column (off=0) or the outermost one (off=1) empty
+    off = 0 if drop == "inner" else 1
     for r, base in enumerate((0, 10, 20)):
         for c in range(5):                      # left: pinkie(0) -> inner(4)
             grid[(r, c + off)] = keys40[base + c]
@@ -276,8 +279,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--alphas", default="qwerty",
                     help="qwerty (default), colemakdh, colemak, dvorak, workman, halmak, ...")
-    ap.add_argument("--drop", choices=["inner", "outer"], default="inner",
-                    help="which of the 6 main columns to leave empty (default: inner)")
+    ap.add_argument("--drop", choices=["outer", "inner"], default="outer",
+                    help="which of the 6 main columns to leave empty: 'outer' (leftmost/"
+                         "rightmost column, default) or 'inner' (next to the centre gap)")
     ap.add_argument("--headers", type=Path, help="path to miryoku_layer_alternatives.h")
     ap.add_argument("--template", type=Path,
                     help="existing .vil keeping uid/settings/encoders (e.g. your own export)")

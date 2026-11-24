@@ -35,8 +35,8 @@ column per hand has nothing on it:
 
 | Cornix position | Miryoku role |
 |---|---|
-| left columns 0–4 / right columns 4–0 (pinkie → inner) | 5 Miryoku columns per hand |
-| left/right **innermost** column (6th) | `KC_NO` (free; regenerate with `--drop outer` to keep the pinkie column instead) |
+| columns 1–5 of each half (pinkie → inner) | 5 Miryoku columns per hand |
+| **column 0 of each half** (leftmost / rightmost of the keyboard) | `KC_NO` — the empty column is on the outside, the centre stays fully usable. Regenerate with `--drop inner` to empty the columns next to the centre gap instead |
 | thumb fans columns 3,4,5 | Esc(Media) Space(Nav) Tab(Mouse) ǀ Enter(Sym) Bspc(Num) Del(Fun) |
 | 3+3 palm keys, inner keys | `KC_NO` — free real estate, drop something useful in via Vial |
 | 2 encoder push buttons | kept as `KC_MUTE` / `KC_BTN3` on every layer (they were that in your export) |
