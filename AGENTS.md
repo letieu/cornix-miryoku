@@ -24,7 +24,9 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   default and must stay so.
 - **Cmd and Ctrl swapped** on the home row (macOS: Command under the middle
   finger, Control on the pinkie): `--swap gui,ctrl`.
-- **Vim-style nav layer** (`MIRYOKU_NAV_VI`): `--nav vi`.
+- **Vim-style nav *and* mouse layers** (`MIRYOKU_NAV_VI` / `MIRYOKU_MOUSE_VI`):
+  `--nav vi --mouse vi`. Both must use the same flavour, otherwise the mouse keys
+  sit one column outward from the arrows and the hjkl muscle memory breaks.
 - Home-row-mod tuning: tapping term 200 ms, flow tap 150 ms, permissive hold on,
   hold-on-other-key-press off, chordal hold on (`--hrm-tune`, on by default).
 - Encoder push buttons stay `KC_MUTE` / `KC_BTN3`.

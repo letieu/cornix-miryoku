@@ -34,7 +34,7 @@ skill at `~/code/personal/cornix-miryoku`.
 
    ```bash
    python3 vial/make_miryoku_vil.py \
-       --alphas qwerty --swap gui,ctrl --nav vi \
+       --alphas qwerty --swap gui,ctrl --nav vi --mouse vi \
        --template <their-export.vil> -o vial/cornix-miryoku-qwerty.vil
    ```
 
@@ -78,6 +78,8 @@ the mapping to `KEYS`/`MISC`/`CLIPBOARD` in the script.
 - Layer **numbering matters**: Miryoku's `LT<n>()`/`TO(n)` reference
   `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`.
   Insert/remove a layer and every layer-tap pointer moves.
+- `--nav vi` without `--mouse vi` leaves the mouse keys one column outward from
+  the arrows (the user noticed immediately); always pass both.
 - The dead column is **deliberate** (user preference, outer columns). Do not
   "fix" it back to the centre.
 - Miryoku's `&bt` / output-toggle / external-power keys have no Vial keycode;

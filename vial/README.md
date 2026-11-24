@@ -11,8 +11,8 @@ there.
 
 Shipped options: outer columns empty, **Cmd/Control swapped** (macOS: Command on
 the middle finger, Control on the pinkie) and the **vim-style Nav layer**
-(`MIRYOKU_NAV_VI`: arrows on the home row next to the centre, paging on the row
-below). Shortcut combos such as `LGUI(KC_C)` are untouched - they stay Cmd.
+(`MIRYOKU_NAV_VI` + `MIRYOKU_MOUSE_VI`: arrows/pointer on the home row next to
+the centre, paging/scroll on the row below - both layers on the same fingers). Shortcut combos such as `LGUI(KC_C)` are untouched - they stay Cmd.
 | `make_miryoku_vil.py` | generator (translates Miryoku ZMK layer definitions to Vial keycodes) |
 | `vial_names.txt` | Vial keycode names, used for offline validation |
 | `miryoku_layer_alternatives.h` | vendored from [miryoku_zmk](https://github.com/manna-harbour/miryoku_zmk) (MIT), the source of the 10 layer definitions |
@@ -86,11 +86,11 @@ tapping term is still applied.
 
 ```bash
 # exactly what was shipped
-python3 make_miryoku_vil.py --alphas qwerty --swap gui,ctrl --nav vi \
+python3 make_miryoku_vil.py --alphas qwerty --swap gui,ctrl --nav vi --mouse vi \
         --template ~/Downloads/a.vil -o cornix-miryoku-qwerty.vil
 
 # variations
-python3 make_miryoku_vil.py --alphas colemakdh --swap gui,ctrl --nav vi
+python3 make_miryoku_vil.py --alphas colemakdh --swap gui,ctrl --nav vi --mouse vi
 python3 make_miryoku_vil.py --alphas qwerty                      # default Miryoku mods/nav
 python3 make_miryoku_vil.py --alphas qwerty --swap gui,lsft      # Command on the index finger
 python3 make_miryoku_vil.py --alphas qwerty --nav invertedt --mouse vi
