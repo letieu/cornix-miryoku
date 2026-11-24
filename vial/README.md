@@ -50,6 +50,25 @@ Layers: `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM
 — the numbering Miryoku's own `LT<n>()`/`TO(n)` references expect. Your firmware
 already reports 10 layers, so no firmware change is needed.
 
+## Home-row-mod tuning
+
+The files also carry tuned QMK/Vial settings (Vial → *QMK Settings* tab) so the
+home-row mods stop misfiring during fast rolls:
+
+| Setting | Before | Now | Why |
+|---|---|---|---|
+| Tapping Term | 250 ms | **200 ms** | earlier tap/hold decision, fewer accidental modifiers |
+| Flow Tap | 120 ms | **150 ms** | a modifier is ignored on keys typed right after a tap (fixes fast rolls) |
+| Permissive Hold | on | on | an intentional mod+key chord still resolves on the key's release |
+| Hold On Other Key Press | off | off | left off on purpose: it makes down-rolls (D then F) fire the modifier |
+| Chordal Hold | on | on | same-hand rolls count as taps |
+
+Tune to taste live in Vial's *QMK Settings* panel - no reflash needed. If a key
+taps when you meant a hold (or the reverse), move Tapping Term by ±20 ms; that is
+the single dial that matters. Note that Chordal Hold / Flow Tap only do something
+if the installed RMK build implements them - if the keyboard ignores them, the
+tapping term is still applied.
+
 ## Known gaps (nothing fatal, all fixable in the Vial UI)
 
 - Miryoku's `&bt` / output-toggle keys are `KC_NO`: RMK's custom keycodes come

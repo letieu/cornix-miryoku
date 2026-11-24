@@ -39,6 +39,26 @@ EXISTING = {(r, c) for r in range(ROWS) for c in range(COLS) if c < 6}
 EXISTING |= {(2, 6), (5, 6)}          # the two inner keys
 ENCODER_KEYS = [(2, 6), (5, 6)]       # push buttons of the two encoders
 
+# QMK/Vial setting IDs (see vial-gui src/main/resources/base/qmk_settings.json)
+QSID_TAPPING_TERM = "7"
+QSID_PERMISSIVE_HOLD = "22"
+QSID_HOLD_ON_OTHER_KEY_PRESS = "23"
+QSID_CHORDAL_HOLD = "26"
+QSID_FLOW_TAP = "27"
+
+# Home-row-mod tuning written into the .vil settings block. Shortening the
+# tapping term and enabling Flow Tap is what stops fast rolls from firing the
+# modifiers by accident; permissive hold stays on so an intentional
+# mod+key chord still resolves immediately, while "hold on other key press"
+# stays off because it makes down-rolls (d then f) fire the mod.
+HRM_SETTINGS = {
+    QSID_TAPPING_TERM: 200,            # 250 -> 200 ms: tap/hold boundary
+    QSID_FLOW_TAP: 150,                # ignore a mod on keys typed right after a tap
+    QSID_PERMISSIVE_HOLD: 1,           # keep: mod+key resolves on the key's release
+    QSID_HOLD_ON_OTHER_KEY_PRESS: 0,   # keep: prevents rolling misfires
+    QSID_CHORDAL_HOLD: 1,              # keep: same-hand roll counts as a tap
+}
+
 # Miryoku layer order, must match U_BASE..U_FUN in miryoku_layer_list.h
 LAYER_ORDER = ["BASE", "EXTRA", "TAP", "BUTTON", "NAV", "MOUSE", "MEDIA",
                "NUM", "SYM", "FUN"]
@@ -337,6 +357,9 @@ def main():
                     help="swap two modifiers on the home row and layer mod clusters,"
                          " e.g. 'gui,ctrl' to put Cmd under the middle finger on macOS;"
                          " accepts gui/ctrl/alt/shift with optional l/r prefix")
+    ap.add_argument("--no-hrm-tune", dest="hrm_tune", action="store_false",
+                    help="keep the tapping/flow-tap values from the template instead of"
+                         " the tuned home-row-mod preset")
     ap.add_argument("--encoder-clicks", default="KC_MUTE,KC_BTN3",
                     help="keycodes for the two encoder push buttons, 'x,y' (default: KC_MUTE,KC_BTN3);"
                          " use 'none,none' to leave them empty")
@@ -387,6 +410,10 @@ def main():
             "settings": {"2": 50, "6": 1000, "7": 250, "18": 20, "19": 20,
                          "22": 1, "23": 0, "26": 1, "27": 120},
         }
+
+    if args.hrm_tune:
+        settings = template.setdefault("settings", {})
+        settings.update(HRM_SETTINGS)
 
     bad = validate(layers, HERE / "vial_names.txt")
     if bad:
