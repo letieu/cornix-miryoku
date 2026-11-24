@@ -29,6 +29,13 @@ To drop the outer pinkie column instead, move the `XXX` placeholders in
 `config/includes/miryoku_cornix.h` to the start of the left rows and the end of
 the right rows.
 
+## Vial / no-flash option
+
+If the keyboard is still on the stock **RMK + Vial** firmware you do not need
+any of the above: load `vial/cornix-miryoku-qwerty.vil` (or
+`-colemakdh.vil`) in Vial over USB and the keymap is written to the keyboard
+without flashing. See [vial/README.md](vial/README.md).
+
 ## Flashing
 
 1. Build with GitHub Actions (push, or run the workflow manually).
