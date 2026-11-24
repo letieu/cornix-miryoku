@@ -4,6 +4,17 @@ ZMK firmware that puts the [Miryoku](https://github.com/manna-harbour/miryoku)
 layout on the Cornix (`jzf/cornix_*` boards from
 [hitsmaxft/zmk-keyboard-cornix](https://github.com/hitsmaxft/zmk-keyboard-cornix)).
 
+## Agent / automation notes
+
+`AGENTS.md` records the settled preferences (outer columns empty, Cmd/Control
+swap, vim nav, HRM timings) and the rules for changing the keymap. The skill at
+`.agents/skills/cornix-miryoku-keymap/` carries the deeper how-to (matrix map,
+`.vil` format, generator flags); run `/skill:cornix-miryoku-keymap` from this
+folder in pi to force-load it.
+
+Handy: `python3 vial/preview.py vial/cornix-miryoku-qwerty.vil --settings`
+prints the whole layout as a keyboard picture without needing Vial.
+
 ## Files
 
 | File | Purpose |

@@ -1,0 +1,88 @@
+---
+name: cornix-miryoku-keymap
+description: Change, regenerate, inspect or debug the Miryoku keymap of the user's Cornix split keyboard (Vial .vil files, RMK firmware, or the alternative ZMK build). Use for any request to remap keys, move modifiers, edit layers, tune home-row mods/tapping term, add macros/combos, or explain what a key does.
+---
+
+# Cornix Miryoku keymap
+
+The user's keyboard is a **Cornix** (3×6 columns per half + 6 bottom-row keys per
+half + 2 inner keys, 50 keys, 2 encoders), running the stock **RMK firmware with
+Vial support**. The Miryoku layout is shipped as `.vil` files that get loaded
+into Vial over USB — no compiling, no flashing.
+
+Read `references/hardware.md` (matrix map, which cells exist, finger columns)
+and `references/vil-format.md` (`.vil` schema, keycode notation, settings IDs)
+before editing. Everything below assumes the repo checkout that contains this
+skill at `~/code/personal/cornix-miryoku`.
+
+## Decide the path first
+
+| Request | Path |
+|---|---|
+| "change a key / layer / modifier / timing" (normal case) | regenerate or patch the `.vil`, user loads it in Vial over USB |
+| "why does this key do X" / "show me my layout" | `python3 vial/preview.py <file>` and explain |
+| "I want it on ZMK / flash firmware" | `config/cornix.keymap` + `config/includes/miryoku_cornix.h`, GitHub Actions build, UF2 over USB — mention it cannot be done over Bluetooth |
+
+## Standard workflow for a keymap change
+
+1. **Get the current keymap as the template.** Ask the user for a fresh export
+   (*Vial → File → Save current layout*) if their manual tweaks must be kept, or
+   reuse the newest `.vil` in `vial/` / `~/Downloads`. Never regenerate without
+   `--template`: the generator falls back to a placeholder `uid`, settings and
+   encoder mapping, and Vial can then reject the file.
+2. **Regenerate with the settled options** (`AGENTS.md` has the rationale):
+
+   ```bash
+   python3 vial/make_miryoku_vil.py \
+       --alphas qwerty --swap gui,ctrl --nav vi \
+       --template <their-export.vil> -o vial/cornix-miryoku-qwerty.vil
+   ```
+
+   Same for `--alphas colemakdh` → `vial/cornix-miryoku-colemakdh.vil`.
+3. **One-off tweaks** (a single key, a `USER00`-style custom keycode, macros):
+   edit the JSON directly, e.g. set `data["layout"][layer][row][col] = "KC_ESC"`.
+   Keep the grid shape (8 rows × 7 cols), keep `-1` in cells that do not exist,
+   keep `uid`/`settings`. Python one-liner:
+   `python3 - <<'EOF' ... json.load / modify / json.dump(indent=1) ... EOF`.
+4. **Validate**: run the generator's checks (it exits non-zero on an unknown
+   keycode) or `python3 vial/preview.py <file> --settings`, and confirm:
+   - 10 layers, each 8 rows × 7 columns,
+   - `-1` only in `(r,6)` for `r ∉ {2,5}`,
+   - home row still reads `LCTL_T/LALT_T/LGUI_T/LSFT_T` (left) and the mirror,
+   - settings unchanged unless intended.
+5. **Commit** (`git -C ~/code/personal/cornix-miryoku commit`), then tell the
+   user: load the `.vil` in Vial over USB (*File → Load saved layout*), and what
+   to check afterwards. Remind them the load overwrites any manual Vial edits.
+
+## Generator reference (`vial/make_miryoku_vil.py`)
+
+| Flag | Meaning |
+|---|---|
+| `--alphas qwerty\|colemakdh\|colemak\|dvorak\|workman\|halmak\|…` | base layer, suffix of `MIRYOKU_ALTERNATIVES_BASE_<X>` |
+| `--drop outer` (default) | empty the outer column of each half; `--drop inner` empties the columns next to the centre (upstream Miryoku placement) |
+| `--swap gui,ctrl` | swap two modifiers in mod-taps and standalone mods; accepts `gui/ctrl/alt/shift`, `cmd`, `opt`, `l/r` prefixes. Modded shortcuts `LGUI(KC_C)` are never swapped |
+| `--nav vi\|invertedt`, `--mouse vi\|invertedt` | alternate Miryoku nav/mouse layers (`MIRYOKU_NAV_VI` = vim style) |
+| `--hrm-tune` / `--no-hrm-tune` | write the tuned home-row-mod settings (default on) |
+| `--encoder-clicks KC_MUTE,KC_BTN3` | encoder push buttons on every layer |
+| `--template <vil>` | reuse `uid`, settings, encoders, macros, tap-dance, combos |
+| `-o <out.vil>` | output path |
+
+Layer definitions come from the vendored
+`vial/miryoku_layer_alternatives.h` (miryoku_zmk, MIT). The generator raises
+`untranslated Miryoku token: …` when Miryoku grows a keycode it cannot map — add
+the mapping to `KEYS`/`MISC`/`CLIPBOARD` in the script.
+
+## Pitfalls that have already bitten
+
+- Vial works over **USB only**; Bluetooth is not a config path.
+- Layer **numbering matters**: Miryoku's `LT<n>()`/`TO(n)` reference
+  `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`.
+  Insert/remove a layer and every layer-tap pointer moves.
+- The dead column is **deliberate** (user preference, outer columns). Do not
+  "fix" it back to the centre.
+- Miryoku's `&bt` / output-toggle / external-power keys have no Vial keycode;
+  they are `KC_NO` and are meant to be picked in Vial's *Custom* section
+  (`USER00…` on this firmware). `CW_TOGG`, `RGB_*`, `QK_BOOT` are written but may
+  be no-ops depending on the RMK build.
+- The `.vil` cannot carry per-key tapping-term overrides; HRM behaviour is the
+  global QMK settings block plus whatever the firmware implements.
