@@ -1,0 +1,29 @@
+---
+# Build matrix for the Miryoku-Cornix firmware.
+# Miryoku is a 36-key layout; the Cornix-specific position mapping lives in
+# config/includes/miryoku_cornix.h and the rest of the keymap comes from
+# manna-harbour/miryoku_zmk.
+include:
+  # standard split: left half is the central
+  - board: cornix_left//zmk
+    artifact-name: cornix_miryoku_left
+
+  # right half (same firmware for standard and dongle setups)
+  - board: cornix_right//zmk
+    artifact-name: cornix_miryoku_right
+
+  # left half when a separate USB dongle is the central
+  - board: cornix_ph_left//zmk
+    artifact-name: cornix_miryoku_left_for_dongle
+
+  # optional USB dongle central (see the module README for display shields)
+  - board: nice_nano//zmk
+    shield: cornix_dongle_adapter
+    snippet: studio-rpc-usb-uart nrf52840-nosd
+    artifact-name: cornix_miryoku_dongle
+
+  # clears stored settings / BLE bonds before pairing the new firmware
+  - board: cornix_right//zmk
+    shield: settings_reset
+    snippet: studio-rpc-usb-uart nrf52840-nosd
+    artifact-name: cornix_miryoku_reset

@@ -1,0 +1,21 @@
+// Miryoku on the Cornix (jzf/cornix ZMK boards)
+//
+//   Miryoku ZMK:          https://github.com/manna-harbour/miryoku_zmk
+//   Cornix board module:  https://github.com/hitsmaxft/zmk-keyboard-cornix
+//
+// Physical position mapping: config/includes/miryoku_cornix.h
+// Miryoku options are plain C defines placed before the includes below
+// (the default alphas layout is Colemak Mod-DH).
+//
+//   #define MIRYOKU_ALPHAS_QWERTY
+//   #define MIRYOKU_NAV_VI
+//   #define MIRYOKU_LAYERS_FLIP
+//   #define MIRYOKU_KLUDGE_THUMBCOMBOS
+//
+// Full list: https://github.com/manna-harbour/miryoku_zmk#options
+
+#define MIRYOKU_ALPHAS_QWERTY
+
+#include "../miryoku_zmk/miryoku/custom_config.h"
+#include "includes/miryoku_cornix.h"
+#include "../miryoku_zmk/miryoku/miryoku.dtsi"
