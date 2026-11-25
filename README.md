@@ -140,6 +140,37 @@ Notes:
 - Incremental builds take ~1 min per target; `west build -d build/left` alone
   re-runs the last configuration.
 
+## Reverting to the stock RMK firmware
+
+The nice_nano bootloader cannot read the installed firmware back out, so the
+stock UF2s are the only way home. They ship with the board module:
+`zmk-keyboard-cornix/rmkfw/V1.6.zip` and `V1.6.99测试版.zip`, each containing
+`cornix-left.uf2` + `cornix-right.uf2` (confirmed RMK builds - the images carry
+`vial:f64c2b3c` and RMK source paths).
+
+```bash
+./scripts/prepare-rollback.sh        # -> ~/Downloads/cornix-rollback/
+ZIP=../zmk-keyboard-cornix/rmkfw/V1.6.99测试版.zip ./scripts/prepare-rollback.sh
+```
+
+That folder ends up with the stock left/right UF2s, a ZMK `settings_reset` UF2, the
+current `.vil` and `ROLLBACK.txt` with checksums. Recovery is then:
+
+1. Per half: USB-C in, **double-tap RESET**, a `NICENANO` volume appears, drag the
+   UF2 on. The bootloader sits in a protected part of the chip and no UF2 here
+   touches it, so this escape hatch works even if the flashed firmware is
+   completely dead (no USB, no BLE, nothing).
+2. If you came from ZMK, flash `settings_reset` to one half first, then the stock
+   firmware - stale NVS/BLE bonds are the usual cause of "it powers on but types
+   nothing".
+3. On the host, delete the old Bluetooth entry for the keyboard and re-pair.
+4. Vial over USB -> **File → Load saved layout** -> `cornix-miryoku-qwerty.vil`
+   (Vial rewrites the whole keymap and the QMK settings block, so RMK's leftover
+   storage does not matter).
+
+Do this once now, before flashing anything: having the folder ready is what makes
+a bad flash a two-minute problem instead of a lost evening.
+
 ## Flashing
 
 1. Build with GitHub Actions (push, or run the workflow manually).
