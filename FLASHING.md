@@ -73,10 +73,10 @@ untouched. `--dry-run` prints the block count and flash range without writing.
 3. Drag **`settings-reset.uf2`** onto `cornix`. It copies, the drive unmounts
    and the half reboots into a minimal firmware that erases stored settings and
    old BLE bonds.
-4. **Double-tap RESET** again → `cornix` → now the real firmware.
-5. Drag **`left-central.uf2`**: ZMK + Miryoku (QWERTY base, vim nav/mouse
-   layers). The half reboots into the keyboard.
-6. Unplug the left half.
+4. **Double-tap RESET** again → `cornix` → drag **`left-central.uf2`**: ZMK +
+   Miryoku (layers generated from the `.vil`). The half reboots into the
+   keyboard.
+5. Unplug the left half.
 
 ## Right half (peripheral)
 
