@@ -83,6 +83,18 @@ changes) and the human docs in `README.md`, `vial/README.md`.
 - ZMK has no equivalent for RMK's `KC_ACL*` and `USERnn`, so those become
   `&none`; mouse speed is `ZMK_POINTING_DEFAULT_MOVE_VAL` (1250 px/s) plus the
   `&mmv` override in `config/cornix.keymap` (300 ms ramp, 8 ms reports).
+- `config/cornix.keymap` owns the `keymap` node itself (no `miryoku.dtsi`): the
+  layers come from `scripts/gen_zmk_keys.py` and each layer carries
+  `sensor-bindings`, which Miryoku's node cannot provide - without it the rotary
+  encoders do nothing. Encoders: left = volume, right = `&msc` wheel.
+- LEDs: two WS2812 on SPI3 behind `EXT_POWER`, both disabled in the board
+  devicetree; `config/includes/cornix_leds.overlay` (included by the per-half
+  `cornix_*.overlay`) enables them, and `config/cornix_*.conf` adds the RGB
+  underglow Kconfig. Keep the RGB settings out of `cornix.conf`: the dongle build
+  picks that file up too and has no strip (build error "A zmk,underglow chosen
+  node must be declared").
+- Bluetooth: the `.vil`'s `USER00`-`USER02` are RMK custom keycodes; the generator
+  maps them to `&bt BT_SEL 0/1/2` so profile switching works on ZMK.
 - Split roles: the **left half is the central** and holds keymap + transform, so
   a mapping change only needs the left half reflashed. The dongle build is the
   central in a dongle setup.

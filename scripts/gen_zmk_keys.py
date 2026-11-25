@@ -73,10 +73,14 @@ MOUSE = {
     "KC_WH_U": "&msc SCRL_UP", "KC_WH_R": "&msc SCRL_RIGHT",
     "KC_BTN1": "&mkp MB1", "KC_BTN2": "&mkp MB2", "KC_BTN3": "&mkp MB3",
     "QK_BOOT": "&bootloader",
-    # RMK-only keycodes with no ZMK equivalent
-    "KC_ACL0": "&none", "KC_ACL1": "&none", "KC_ACL2": "&none",
-    "USER00": "&none", "USER01": "&none", "USER02": "&none",
+    # RMK custom keycodes on this board were the Bluetooth slots; ZMK has real
+    # Bluetooth behaviors, so they keep working instead of becoming &none.
+    "USER00": "&bt BT_SEL 0", "USER01": "&bt BT_SEL 1", "USER02": "&bt BT_SEL 2",
+    "USER03": "&bt BT_SEL 3", "USER04": "&bt BT_SEL 4",
+    "USER05": "&bt BT_CLR",
     "CW_TOGG": "&caps_word",
+    # RMK-only mouse acceleration keys (ZMK speed is a compile-time setting)
+    "KC_ACL0": "&none", "KC_ACL1": "&none", "KC_ACL2": "&none",
 }
 
 MOD_SYMBOL = {"LGUI": "LG", "LCTL": "LC", "LALT": "LA", "LSFT": "LS",

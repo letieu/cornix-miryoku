@@ -19,7 +19,9 @@ prints the whole layout as a keyboard picture without needing Vial.
 
 | File | Purpose |
 |---|---|
-| `config/cornix.keymap` | Includes Miryoku, the generated layers and the mouse/hold-tap overrides |
+| `config/cornix.keymap` | Self-contained keymap: generated layers, HRMs, mouse speed, encoders |
+| `config/cornix_left.conf` etc. | Per-half Kconfig: RGB underglow + EXT_POWER (kept out of `cornix.conf`, which the dongle also picks up) |
+| `config/cornix_left.overlay` etc. | Per-half devicetree overlay -> `config/includes/cornix_leds.overlay` (enables the WS2812 strip) |
 | `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform (outer columns dead) |
 | `config/includes/miryoku_keys_generated.h` | **Generated** layer contents from `vial/cornix-miryoku-qwerty.vil` - do not edit by hand |
 | `scripts/gen_zmk_keys.py` | `.vil` -> `MIRYOKU_LAYER_*` macros, so the ZMK build carries the Vial layout |
@@ -128,6 +130,44 @@ The Vial/RMK firmware on the keyboard still uses tapping term 200 +
 permissive-hold + unilateral-tap: RMK's `MorseMode` is a single exclusive enum,
 so it cannot express positional hold-taps. Try `QMK Settings → Tapping Term 280`
 there if you want the timings to match more closely.
+
+## Hardware: encoders, LEDs, Bluetooth
+
+These are the things the stock RMK firmware did that ZMK does not do by default.
+All three are wired up now:
+
+**Encoders** — ZMK needs `sensor-bindings` on *every* keymap layer, which is why
+including Miryoku's own `keymap` node left them dead. `config/cornix.keymap` owns
+the keymap node and gives each layer:
+
+```c
+sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP>, <&enc_scroll SCRL_UP SCRL_DOWN>;
+```
+
+Left knob = volume (clockwise down, as in the `.vil`), right knob = mouse wheel
+via a small `zmk,behavior-sensor-rotate-var` wrapper around `&msc`. The knob
+pushes are the two inner keys (`&kp C_MUTE`, `&mkp MB3`), carried over from the
+`.vil`.
+
+**LEDs** — the board ships two WS2812 chips on SPI3 behind an `EXT_POWER` rail,
+both `status = "disabled"` in the board devicetree. `config/includes/cornix_leds.overlay`
+turns the strip and the power rail on and sets `zmk,underglow`; the per-half
+`.conf` files add:
+
+```
+CONFIG_ZMK_RGB_UNDERGLOW=y   CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=y
+CONFIG_ZMK_RGB_UNDERGLOW_ON_START=y   CONFIG_WS2812_STRIP_SPI=y
+CONFIG_ZMK_EXT_POWER=y   CONFIG_SPI=y
+```
+
+The `.vil` has the RGB keycodes blanked, so there are no RGB keys in the layers;
+add `&rgb_ug RGB_TOG` / `RGB_BRI` / `RGB_EFF` in Vial (they exist there) and
+regenerate, or remap them in ZMK Studio.
+
+**Bluetooth** — the `.vil`'s `USER00`–`USER02` on the FUN outer column were the
+RMK custom keycodes for Bluetooth slots. The generator now maps them to ZMK's
+real behaviours (`&bt BT_SEL 0/1/2`), so profile switching works again; `&out
+OUT_USB/OUT_BLE` and `&bt BT_CLR` can be added anywhere you like.
 
 ## Build locally (no GitHub Actions)
 

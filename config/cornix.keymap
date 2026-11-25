@@ -1,54 +1,46 @@
-// Miryoku on the Cornix (jzf/cornix ZMK boards)
+// Miryoku on the Cornix (jzf/cornix ZMK boards) — ZMK + Miryoku layout.
 //
-//   Miryoku ZMK:          https://github.com/manna-harbour/miryoku_zmk
-//   Cornix board module:  https://github.com/hitsmaxft/zmk-keyboard-cornix
+//   Physical mapping: config/includes/miryoku_cornix.h
+//   Layer contents:   config/includes/miryoku_keys_generated.h (from the .vil)
 //
-// Physical position mapping: config/includes/miryoku_cornix.h
-// Miryoku options are plain C defines placed before the includes below
-// (the default alphas layout is Colemak Mod-DH).
-//
-//   #define MIRYOKU_ALPHAS_QWERTY
-#define MIRYOKU_NAV_VI
-//   #define MIRYOKU_NAV_VI
-//   #define MIRYOKU_LAYERS_FLIP
-//   #define MIRYOKU_KLUDGE_THUMBCOMBOS
-//
-// Full list: https://github.com/manna-harbour/miryoku_zmk#options
+// This keymap owns the `keymap` node itself instead of including miryoku_zmk's
+// `miryoku.dtsi`: Miryoku's node has no `sensor-bindings`, which is why the
+// rotary encoders do nothing. Everything else (behaviors, pointing, bluetooth)
+// comes from ZMK directly, so the file is self-contained.
 
-#define MIRYOKU_ALPHAS_QWERTY
-#define MIRYOKU_NAV_VI
+#include <behaviors.dtsi>
+#include <behaviors/mouse_keys.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/pointing.h>
 
-#include "../miryoku_zmk/miryoku/custom_config.h"
 #include "includes/miryoku_cornix.h"
-
-// Layer contents generated from the Vial export the keyboard actually runs, so
-// the Cmd/Ctrl swap, the hand-tuned keys and the mouse layer match the .vil.
-// miryoku_layer_selection.h uses MIRYOKU_LAYER_<NAME> if it is already defined.
 #include "includes/miryoku_keys_generated.h"
 
-#include "../miryoku_zmk/miryoku/miryoku.dtsi"
+// Two-step expansion: MIRYOKU_LAYER_<NAME> is itself a macro holding the 54
+// bindings, and it has to be expanded *before* the mapping macro collects its
+// arguments (same trick miryoku_zmk uses).
+#define U_EXPAND(macro, ...) macro(__VA_ARGS__)
 
-// ---------------------------------------------------------------------------
-// "Timeless" home-row mods (urob's configuration, ZMK flavour).
-//
-// The tapping term stops mattering for normal typing: a mod resolves as hold as
-// soon as another key is pressed *and released* ("balanced"), a tap right after
-// another key resolves instantly (require-prior-idle = flow tap), and a same-hand
-// roll can never become a mod (hold-trigger-key-positions = opposite hand).
-// hold-trigger-on-release keeps same-hand mod+mod chording possible.
-//
-// Keymap positions (see includes/miryoku_cornix.h):
-//   0-11   top row    left outer..inner, then right inner..outer
-//   12-23  home row   same order
-//   24-37  bottom row + the two inner keys (30, 31)
-//   38-40  left palms, 41-43 left thumbs, 44-46 right thumbs, 47-49 right palms
+// Encoders, matching the .vil's encoder mapping:
+//   left  knob: clockwise = volume down, counter-clockwise = volume up
+//   right knob: clockwise = scroll up,   counter-clockwise = scroll down
+#define SENSOR_BINDINGS \
+  sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP>, <&enc_scroll SCRL_UP SCRL_DOWN>;
+
+/ {
+  behaviors {
+    // "Timeless" home-row mods (urob's configuration). Positional hold-tap:
+    // a same-hand roll can never resolve as a modifier.
+    // Keymap positions: 0-11 top row, 12-23 home row, 24-37 bottom row + the two
+    // inner keys (30, 31), 38-40 left palms, 41-43 left thumbs, 44-46 right
+    // thumbs, 47-49 right palms.
 #define KEYS_L 0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 30 38 39 40
 #define KEYS_R 6 7 8 9 10 11 18 19 20 21 22 23 31 32 33 34 35 36 37 47 48 49
 #define THUMBS 41 42 43 44 45 46
 
-/ {
-  behaviors {
-    hml: hml {                       // left-hand home-row mods
+    hml: hml {
       compatible = "zmk,behavior-hold-tap";
       #binding-cells = <2>;
       flavor = "balanced";
@@ -59,7 +51,7 @@
       hold-trigger-key-positions = <KEYS_R THUMBS>;
       hold-trigger-on-release;
     };
-    hmr: hmr {                       // right-hand home-row mods
+    hmr: hmr {
       compatible = "zmk,behavior-hold-tap";
       #binding-cells = <2>;
       flavor = "balanced";
@@ -70,46 +62,81 @@
       hold-trigger-key-positions = <KEYS_L THUMBS>;
       hold-trigger-on-release;
     };
+
+    // Right encoder drives the mouse wheel: two &msc bindings, one cell each.
+    enc_scroll: enc_scroll {
+      compatible = "zmk,behavior-sensor-rotate-var";
+      #sensor-binding-cells = <2>;
+      bindings = <&msc>, <&msc>;
+    };
+  };
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    base {
+      display-name = "BASE";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_BASE)>;
+      SENSOR_BINDINGS
+    };
+    extra {
+      display-name = "EXTRA";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_EXTRA)>;
+      SENSOR_BINDINGS
+    };
+    tap {
+      display-name = "TAP";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_TAP)>;
+      SENSOR_BINDINGS
+    };
+    button {
+      display-name = "BUTTON";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_BUTTON)>;
+      SENSOR_BINDINGS
+    };
+    nav {
+      display-name = "NAV";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_NAV)>;
+      SENSOR_BINDINGS
+    };
+    mouse {
+      display-name = "MOUSE";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_MOUSE)>;
+      SENSOR_BINDINGS
+    };
+    media {
+      display-name = "MEDIA";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_MEDIA)>;
+      SENSOR_BINDINGS
+    };
+    num {
+      display-name = "NUM";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_NUM)>;
+      SENSOR_BINDINGS
+    };
+    sym {
+      display-name = "SYM";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_SYM)>;
+      SENSOR_BINDINGS
+    };
+    fun {
+      display-name = "FUN";
+      bindings = <U_EXPAND(MIRYOKU_LAYOUTMAPPING_CORNIX, MIRYOKU_LAYER_FUN)>;
+      SENSOR_BINDINGS
+    };
   };
 };
 
-// Layer-taps keep Miryoku's tap-preferred behaviour, only with the .vil timings.
-&u_lt {
+// Layer-taps (thumbs): Miryoku's tap-preferred behaviour with the .vil timings.
+// A thumb-held layer should not be gated by the opposite-hand rule, so this is
+// separate from &hml / &hmr.
+&lt {
   tapping-term-ms = <200>;
   quick-tap-ms = <150>;
   require-prior-idle-ms = <150>;
-  hold-trigger-on-release;
 };
 
-// Pointer feel.
-//
-// Miryoku ships ZMK's mouse-move behavior with max speed 1250 px/s, but ramps
-// from 0 over 1500 ms, so the first third of a second barely moves. Bring the
-// ramp down to 300 ms, drop the initial dead time and report twice as often
-// (8 ms instead of 16 ms). These override miryoku/miryoku_mousekeys.dtsi, which
-// is included above.
-//
-// Speed itself is per-binding: &mmv MOVE_UP == ZMK_POINTING_DEFAULT_MOVE_VAL
-// (1250 px/s), fixed in miryoku_zmk. Want more? Add your own behavior, e.g.
-//
-//   / {
-//     behaviors {
-//       mmvfast: mouse_move_fast {
-//         compatible = "zmk,behavior-input-two-axis";
-//         #binding-cells = <1>;
-//         x-input-code = <INPUT_REL_X>;
-//         y-input-code = <INPUT_REL_Y>;
-//         time-to-max-speed-ms = <250>;
-//         acceleration-exponent = <1>;
-//       };
-//     };
-//     mmvfast_input_listener: mmvfast_input_listener {
-//       compatible = "zmk,input-listener";
-//       device = <&mmvfast>;
-//     };
-//   };
-//
-// and bind `&mmvfast MOVE(0, -3000)` on a layer of your own.
+// Pointer feel: reach full speed in 300 ms instead of 1500 ms, report every 8 ms.
 &mmv {
   acceleration-exponent = <1>;
   time-to-max-speed-ms = <300>;

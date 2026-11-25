@@ -1,0 +1,5 @@
+/* LEDs + encoder power rail; content in includes/cornix_leds.overlay.
+ * Named after the board so the dongle build (nice_nano +
+ * cornix_dongle_adapter) does not pick it up: the ZMK overlay candidates
+ * strip shield names, and "cornix" would match config/cornix.overlay. */
+#include "includes/cornix_leds.overlay"

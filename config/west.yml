@@ -4,8 +4,6 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: hitsmaxft
       url-base: https://github.com/hitsmaxft
-    - name: manna-harbour
-      url-base: https://github.com/manna-harbour
 
   projects:
     # ZMK main (Zephyr 4.1 baseline, required by the Cornix board definitions)
@@ -18,11 +16,6 @@ manifest:
     - name: zmk-keyboard-cornix
       remote: hitsmaxft
       revision: main
-
-    # Miryoku layout headers (not a Zephyr module, only included by the keymap)
-    - name: miryoku_zmk
-      remote: manna-harbour
-      revision: master
 
   self:
     path: config

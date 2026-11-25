@@ -1,0 +1,26 @@
+/*
+ * Cornix hardware that the board module ships disabled: the WS2812 LED strip on
+ * SPI3 and the EXT_POWER rail that feeds it (see
+ * zmk-keyboard-cornix/boards/shields/cornix_indicator/cornix_indicator.overlay).
+ */
+&spi3 {
+  status = "okay";
+
+  led_strip: ws2812@0 {
+    status = "okay";
+  };
+};
+
+/ {
+  EXT_POWER {
+    status = "okay";
+  };
+
+  aliases {
+    led-strip = &led_strip;
+  };
+
+  chosen {
+    zmk,underglow = &led_strip;
+  };
+};

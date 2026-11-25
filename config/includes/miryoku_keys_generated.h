@@ -132,6 +132,6 @@
   &none, &to 9, &to 6, &kp RALT, &none,                                   \
   &none, &none, &kp K_APP, &kp SPACE, &kp TAB,                            \
   &none, &none, &none, &none, &none,                                      \
-  &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &bt BT_SEL 0, &none, &bt BT_SEL 1,                        \
+  &none, &kp C_MUTE, &mkp MB3, &bt BT_SEL 2, &none,                       \
   &none, &none, &none, &none                                              
