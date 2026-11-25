@@ -31,7 +31,7 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   hold-on-other-key-press off, chordal hold on (`--hrm-tune`, on by default).
 - Encoder push buttons stay `KC_MUTE` / `KC_BTN3`.
 - **Mouse keys are tuned faster than RMK's defaults** (`--mouse-tune`): delay 40 ms,
-  interval 14 ms, step 7 px, max speed 4x, and the left thumbs on the MOUSE layer
+  interval 10 ms, step 10 px, max speed 5x, and the left thumbs on the MOUSE layer
   hold `KC_ACL0/ACL1/ACL2` so speed can be halved/boosted on the fly.
 - Shortcut combos stay `LGUI(...)` (Cmd+C/X/V/Z) even though the mod positions
   are swapped.

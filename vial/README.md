@@ -72,8 +72,8 @@ tapping term is still applied.
 ## Mouse keys
 
 RMK's stock mouse tuning is slow (5 px per 20 ms after a 100 ms delay), so the
-files carry a faster preset: delay 40 ms, interval 14 ms, step 7 px, top speed
-4x, wheel 50 ms / 40 ms. On the MOUSE layer the three left thumbs switch the
+files carry a faster preset: delay 30 ms, interval 10 ms, step 10 px, top speed
+5x, wheel 50 ms / 40 ms. On the MOUSE layer the three left thumbs switch the
 acceleration level on the fly - `KC_ACL0` (slow) `KC_ACL1` `KC_ACL2` (double
 speed) - which works even if the firmware ignores the settings ids. Disable with
 `--no-mouse-tune`.

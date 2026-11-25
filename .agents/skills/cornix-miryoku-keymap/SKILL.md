@@ -63,7 +63,7 @@ skill at `~/code/personal/cornix-miryoku`.
 | `--swap gui,ctrl` | swap two modifiers in mod-taps and standalone mods; accepts `gui/ctrl/alt/shift`, `cmd`, `opt`, `l/r` prefixes. Modded shortcuts `LGUI(KC_C)` are never swapped |
 | `--nav vi\|invertedt`, `--mouse vi\|invertedt` | alternate Miryoku nav/mouse layers (`MIRYOKU_NAV_VI` = vim style) |
 | `--hrm-tune` / `--no-hrm-tune` | write the tuned home-row-mod settings (default on) |
-| `--mouse-tune` / `--no-mouse-tune` | write the faster mouse-key settings (delay 40, interval 14, step 7, max speed 4x, wheel 40/50) and put `KC_ACL0/1/2` on the MOUSE layer's left thumbs (default on) |
+| `--mouse-tune` / `--no-mouse-tune` | write the faster mouse-key settings (delay 30, interval 10, step 10, max speed 5x, wheel 40/50) and put `KC_ACL0/1/2` on the MOUSE layer's left thumbs (default on) |
 | `--encoder-clicks KC_MUTE,KC_BTN3` | encoder push buttons on every layer |
 | `--template <vil>` | reuse `uid`, settings, encoders, macros, tap-dance, combos |
 | `-o <out.vil>` | output path |

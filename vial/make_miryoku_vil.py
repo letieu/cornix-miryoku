@@ -71,11 +71,11 @@ QSID_WHEEL_INTERVAL = "15"
 QSID_WHEEL_TIME_TO_MAX = "17"
 
 MOUSE_SETTINGS = {
-    QSID_MOUSE_DELAY: 40,        # 100 -> 40 ms: pointer starts moving sooner
-    QSID_MOUSE_INTERVAL: 14,     # 20 -> 14 ms between movement reports
-    QSID_MOUSE_STEP: 7,          # 5 -> 7 px per report (~2x default speed)
-    QSID_MOUSE_MAX_SPEED: 4,     # 3 -> 4x accelerated top speed
-    QSID_MOUSE_TIME_TO_MAX: 30,  # 50 -> 30 ticks to reach top speed
+    QSID_MOUSE_DELAY: 30,        # 100 -> 30 ms: pointer starts moving sooner
+    QSID_MOUSE_INTERVAL: 10,     # 20 -> 10 ms between movement reports
+    QSID_MOUSE_STEP: 10,         # 5 -> 10 px per report (~4x default speed)
+    QSID_MOUSE_MAX_SPEED: 5,     # 3 -> 5x accelerated top speed
+    QSID_MOUSE_TIME_TO_MAX: 20,  # 50 -> 20 ticks to reach top speed
     QSID_WHEEL_DELAY: 50,        # 100 -> 50 ms
     QSID_WHEEL_INTERVAL: 40,     # 80 -> 40 ms between wheel reports
     QSID_WHEEL_TIME_TO_MAX: 15,
