@@ -5,22 +5,22 @@ same bits as `gh workflow run` would produce (only the compiler host differs).
 
 | File | Board / shield | Flash / RAM | Use |
 |---|---|---|---|
-| `left-central.uf2` | `cornix_left//zmk` | 263 K / 74 K | left half, standard split — **the central** |
+| `left-central.uf2` | `cornix_left//zmk` + `studio-rpc-usb-uart` | 263 K / 74 K | left half, standard split — **the central** |
 | `right-peripheral.uf2` | `cornix_right//zmk` | 191 K / 38 K | right half (peripheral) |
 | `left-peripheral-dongle.uf2` | `cornix_ph_left//zmk` | 191 K / 38 K | left half when a dongle is the central |
 | `dongle-central.uf2` | `nice_nano//zmk` + `cornix_dongle_adapter` | 273 K / 82 K | USB dongle build (display off) |
 | `settings-reset.uf2` | `cornix_right//zmk` + `settings_reset` | 58 K | clears NVS / BLE bonds |
 
 Contents: ZMK `main` + `zmk-keyboard-cornix` + `miryoku_zmk`, with the layers
-generated from `vial/cornix-miryoku-qwerty.vil` (see `scripts/gen_zmk_keys.py`)
-and the `&mmv` mouse-speed override. No SoftDevice — the image links at `0x1000`,
+generated from `vial/cornix-miryoku-qwerty.vil` (see `scripts/gen_zmk_keys.py`),
+the `&mmv` mouse-speed override and **ZMK Studio** enabled for live remapping. No SoftDevice — the image links at `0x1000`,
 like the stock RMK firmware.
 
 ## Provenance
 
 | | |
 |---|---|
-| repo commit | `e1dd6ae` (see `git log -- firmware/`) |
+| repo commit | `03a5bea` (see `git log -- firmware/`) |
 | ZMK revision | `main` |
 | Zephyr | 4.1.0 |
 | Zephyr SDK | 0.16.9 (`arm-zephyr-eabi`) |
