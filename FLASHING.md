@@ -30,32 +30,40 @@ this: restore s140 first, then flash ZMK.
 - Do one half at a time; keep the other one unplugged and switched off.
 - Reset button = the small button on/near the nice!nano controller.
   **Double-tap = two quick presses** (< 0.5 s apart).
-- A `NICENANO` volume in Finder means you are in the bootloader. It disappears
-  after each flash; you always double-tap again for the next file.
-- Drag the file onto `NICENANO`. Wait for the copy to finish and the drive to
+- A volume named **`cornix`** in Finder means you are in the bootloader (this
+  board's bootloader uses its own label, not the default `NICENANO`). It contains
+  `INFO_UF2.TXT`, `INDEX.HTM` and `CURRENT.UF2`; `INFO_UF2.TXT` should say
+  `Board-ID: cornix` and `SoftDevice: not found`. It disappears after each flash;
+  you always double-tap again for the next file.
+- Drag the file onto `cornix`. Wait for the copy to finish and the drive to
   unmount on its own before touching anything.
+- If the volume mounts **read-only** (Finder refuses the drop, "Read-only file
+  system" in Terminal), eject it and double-tap RESET again - macOS flags the FAT
+  as dirty after an interrupted write and only remounts read-write on a fresh
+  bootloader entry. If it still refuses: `sudo mount -t msdos -o rw /dev/diskN
+  /Volumes/cornix`, or flash from Windows/Linux, which never do this.
 
 ---
 
 ## Left half (central) — files 0, 1, 2
 
 1. Switch the keyboard on and plug **USB-C into the left half**.
-2. **Double-tap RESET.** Finder shows **`NICENANO`**.
+2. **Double-tap RESET.** Finder shows the volume **`cornix`**.
    If not: other cable/port, double-tap faster, or check with `ls /Volumes`.
 3. Drag **`0-s140-restore.uf2`** onto `NICENANO`. It copies, the drive unmounts,
    the half reboots (it does nothing visible — that is expected).
-4. **Double-tap RESET** again → `NICENANO` → drag **`1-settings-reset.uf2`**.
+4. **Double-tap RESET** again → `cornix` → drag **`1-settings-reset.uf2`**.
    This erases stored settings and old BLE bonds.
-5. **Double-tap RESET** again → `NICENANO` → drag **`2-LEFT-central.uf2`**.
+5. **Double-tap RESET** again → `cornix` → drag **`2-LEFT-central.uf2`**.
    This is the real firmware: ZMK + Miryoku (QWERTY base, vim nav/mouse layers).
 6. Unplug the left half.
 
 ## Right half (peripheral) — files 0, 1, 3
 
 7. Plug **USB-C into the right half**.
-8. **Double-tap RESET** → `NICENANO` → drag **`0-s140-restore.uf2`**.
-9. **Double-tap RESET** → `NICENANO` → drag **`1-settings-reset.uf2`**.
-10. **Double-tap RESET** → `NICENANO` → drag **`3-RIGHT-peripheral.uf2`**.
+8. **Double-tap RESET** → `cornix` → drag **`0-s140-restore.uf2`**.
+9. **Double-tap RESET** → `cornix` → drag **`1-settings-reset.uf2`**.
+10. **Double-tap RESET** → `cornix` → drag **`3-RIGHT-peripheral.uf2`**.
 11. Unplug, then **power-cycle both halves together** (switch off both, switch
     on both) so the two sides re-establish the split link.
 
@@ -82,7 +90,8 @@ this: restore s140 first, then flash ZMK.
 
 | Symptom | Fix |
 |---|---|
-| No `NICENANO` volume | data cable, other port, double-tap faster; check `ls /Volumes` |
+| No `cornix` volume | data cable, other port, double-tap faster; check `ls /Volumes` |
+| Volume is read-only, Finder refuses the drop | eject + double-tap RESET for a clean mount; else `sudo mount -t msdos -o rw /dev/diskN /Volumes/cornix`; else flash from Windows/Linux |
 | Drag does nothing | re-drag; keep the Finder window open until it unmounts |
 | Nothing types after flashing | wrong half got the wrong file, or the halves need a joint power-cycle → re-flash with correct files, cycle both |
 | Types on USB, dead on BLE | delete host pairing, re-pair; confirm both halves were re-flashed |
@@ -90,7 +99,7 @@ this: restore s140 first, then flash ZMK.
 | Want to go back to Vial | `~/Downloads/cornix-rollback/`: double-tap RESET → `0-settings-reset.uf2` → `1-cornix-rmk-left.uf2` / `2-cornix-rmk-right.uf2`, re-pair, then Vial → *File → Load saved layout* → `cornix-miryoku-qwerty.vil` |
 
 Recovery rule of thumb: **the bootloader never goes away.** No matter how bad
-the firmware is, double-tap RESET gives you `NICENANO` and you can flash again.
+the firmware is, double-tap RESET gives you `cornix` and you can flash again.
 
 ## Rebuilding after changing the keymap
 
