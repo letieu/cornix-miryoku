@@ -92,7 +92,10 @@ untouched. `--dry-run` prints the block count and flash range without writing.
 
 This firmware has ZMK Studio enabled. Plug the left half in over USB, open
 <https://zmk.studio/> in Chrome/Edge, connect to `Cornix` and edit keys/layers
-live. Studio stores changes in NVS; the compiled keymap only comes back after
+live. Studio talks over a USB serial endpoint, so the board must show up as
+`/dev/cu.usbmodem*` (`ls /dev/cu.usbmodem*`); if that is missing the flashed
+image was built without the `studio-rpc-usb-uart` snippet - rebuild with
+`PRISTINE=1 ./scripts/build-local.sh left` and reflash. Studio stores changes in NVS; the compiled keymap only comes back after
 "Restore Stock Settings" in Studio. Timing/mouse/combo settings are not editable
 there - those live in `config/` and need a rebuild.
 

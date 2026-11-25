@@ -192,6 +192,14 @@ Notes:
   (expect `time-to-max-speed-ms = < 0x12c >`, `trigger-period-ms = < 0x8 >`).
 - Incremental builds take ~1 min per target; `west build -d build/left` alone
   re-runs the last configuration.
+- **Changing snippets (or the config overlays) needs `PRISTINE=1`** - Zephyr
+  ignores a changed `SNIPPET` on an existing build directory ("The build
+  directory must be cleaned pristinely when changing snippet"). Studio's
+  `studio-rpc-usb-uart` snippet is exactly this case; without a pristine build
+  the firmware silently gets no USB serial endpoint and `zmk.studio` cannot
+  connect.
+- The script pins the Zephyr **0.16.x** SDK even if your shell exports a 0.17.x
+  `ZEPHYR_SDK_INSTALL_DIR` (0.17 breaks Zephyr 4.1's picolibc).
 
 ## Reverting to the stock RMK firmware
 

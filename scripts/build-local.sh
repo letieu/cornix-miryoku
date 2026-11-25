@@ -33,11 +33,15 @@ fi
 # sys/lock.h collides with Zephyr 4.1's picolibc glue
 # ("conflicting types for '__lock___libc_recursive_mutex'"). Use a local 0.16.9
 # unless the caller pinned something else.
-if [ -z "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
-  for d in "$HOME"/zephyr-sdk-0.16.*; do
-    [ -d "$d" ] && export ZEPHYR_SDK_INSTALL_DIR="$d" && break
-  done
-fi
+for d in "$HOME"/zephyr-sdk-0.16.*; do
+  if [ -d "$d" ]; then
+    if [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ] && [ "$ZEPHYR_SDK_INSTALL_DIR" != "$d" ]; then
+      echo "overriding ZEPHYR_SDK_INSTALL_DIR=$ZEPHYR_SDK_INSTALL_DIR with $d (0.17+ breaks Zephyr 4.1's picolibc)" >&2
+    fi
+    export ZEPHYR_SDK_INSTALL_DIR="$d"
+    break
+  fi
+done
 if [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
   echo "using Zephyr SDK: $ZEPHYR_SDK_INSTALL_DIR"
 fi
@@ -62,8 +66,8 @@ if [ ! -d .west ]; then
   west packages pip --install
 fi
 
-PRISTINE=""
-[ -n "${PRISTINE:-}" ] && PRISTINE="-p"
+PRISME_FLAG=""
+[ -n "${PRISTINE:-}" ] && PRISME_FLAG="-p"
 
 # board/shield/snippet per artifact, matching build.yaml
 build() {
@@ -75,7 +79,7 @@ build() {
   [ -n "$shield" ] && args+=(-DSHIELD="$shield")
   echo "== building $name ($board ${shield:-no shield})"
   # shellcheck disable=SC2086
-  west build $PRISTINE "${args[@]}"
+  west build $PRISME_FLAG "${args[@]}"
 }
 
 for t in "${TARGETS[@]}"; do
