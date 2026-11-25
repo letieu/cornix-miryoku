@@ -76,6 +76,54 @@ flash of both halves (or the dongle), whereas the `.vil` route is instant but
 capped at RMK's compile-time timing. See [vial/README.md](vial/README.md#mouse-keys)
 for the RMK numbers.
 
+## Build locally (no GitHub Actions)
+
+`scripts/build-local.sh` reproduces what the workflow does: it creates a west
+workspace (`$ZMK_WORKSPACE`, default `~/zmk-cornix-ws`), syncs `config/` into it
+(the manifest is `config/west.yml`), fetches ZMK + Zephyr + the board module +
+`miryoku_zmk`, and runs `west build` per artifact with `-DZMK_CONFIG`.
+
+```bash
+./scripts/build-local.sh                # left + right
+./scripts/build-local.sh all            # left right ph_left dongle reset
+./scripts/build-local.sh dongle         # one target
+PRISTINE=1 ./scripts/build-local.sh all # clean rebuild
+```
+
+Output: `~/zmk-cornix-ws/build/<target>/zephyr/zmk.uf2`.
+
+### One-time toolchain setup (macOS, Apple Silicon)
+
+```bash
+# 1. host deps for Zephyr 4.1
+brew install cmake ninja gperf dtc wget libmagic
+
+# 2. west in a venv
+python3 -m venv ~/.venvs/zmk && source ~/.venvs/zmk/bin/activate
+pip install -U west
+
+# 3. Zephyr SDK - only the ARM toolchain is needed; 0.17.4 matches Zephyr 4.1
+curl -LO https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.4/zephyr-sdk-0.17.4_macos-aarch64_minimal.tar.xz
+tar xf zephyr-sdk-0.17.4_macos-aarch64_minimal.tar.xz -C ~/
+~/zephyr-sdk-0.17.4/setup.sh          # sets ZEPHYR_SDK_INSTALL_DIR
+
+# 4. build (first run also runs `west init`/`west update`, ~2 GB, be patient)
+./scripts/build-local.sh left right
+```
+
+Notes:
+
+- Activate the venv (`source ~/.venvs/zmk/bin/activate`) in every new shell; the
+  script only checks that `west` is on `PATH`.
+- If your CMake is v4 and Zephyr trips over `libmetal`, install `cmake@3` and put
+  it in front of `PATH`.
+- `west sdk install -t arm-zephyr-eabi` is an alternative to step 3 once the
+  workspace exists; it picks the SDK version Zephyr asks for.
+- Verify the mouse build actually happened:
+  `grep CONFIG_ZMK_POINTING build/left/zephyr/.config`.
+- Incremental builds take ~1 min per target; `west build -d build/left` alone
+  re-runs the last configuration.
+
 ## Flashing
 
 1. Build with GitHub Actions (push, or run the workflow manually).
