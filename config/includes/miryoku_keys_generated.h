@@ -9,10 +9,10 @@
 #define MIRYOKU_LAYER_BASE \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
   &kp Y, &kp U, &kp I, &kp O, &kp P,                                      \
-  &mt LCTL A, &mt LALT S, &mt LGUI D, &mt LSFT F, &kp G,                  \
-  &kp H, &mt LSFT J, &mt LGUI K, &mt LALT L, &mt LCTL SQT,                \
-  &lt 3 Z, &mt RALT X, &kp C, &kp V, &kp B,                               \
-  &kp N, &kp M, &kp COMMA, &mt RALT DOT, &lt 3 SLASH,                     \
+  &hml LCTL A, &hml LALT S, &hml LGUI D, &hml LSFT F, &kp G,              \
+  &kp H, &hmr LSFT J, &hmr LGUI K, &hmr LALT L, &hmr LCTL SQT,            \
+  &lt 3 Z, &hmr RALT X, &kp C, &kp V, &kp B,                              \
+  &kp N, &kp M, &kp COMMA, &hmr RALT DOT, &lt 3 SLASH,                    \
   &none, &none, &lt 6 ESC, &lt 4 SPACE, &lt 5 TAB,                        \
   &lt 8 RET, &lt 7 BSPC, &lt 9 DEL, &none, &none,                         \
   &kp LG(LS(N4)), &none, &none, &none, &none,                             \
@@ -22,10 +22,10 @@
 #define MIRYOKU_LAYER_EXTRA \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
   &kp Y, &kp U, &kp I, &kp O, &kp P,                                      \
-  &mt LCTL A, &mt LALT S, &mt LGUI D, &mt LSFT F, &kp G,                  \
-  &kp H, &mt LSFT J, &mt LGUI K, &mt LALT L, &mt LCTL SQT,                \
-  &lt 3 Z, &mt RALT X, &kp C, &kp V, &kp B,                               \
-  &kp N, &kp M, &kp COMMA, &mt RALT DOT, &lt 3 SLASH,                     \
+  &hml LCTL A, &hml LALT S, &hml LGUI D, &hml LSFT F, &kp G,              \
+  &kp H, &hmr LSFT J, &hmr LGUI K, &hmr LALT L, &hmr LCTL SQT,            \
+  &lt 3 Z, &hmr RALT X, &kp C, &kp V, &kp B,                              \
+  &kp N, &kp M, &kp COMMA, &hmr RALT DOT, &lt 3 SLASH,                    \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \

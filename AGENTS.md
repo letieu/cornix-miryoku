@@ -27,8 +27,13 @@ changes) and the human docs in `README.md`, `vial/README.md`.
 - **Vim-style nav *and* mouse layers** (`MIRYOKU_NAV_VI` / `MIRYOKU_MOUSE_VI`):
   `--nav vi --mouse vi`. Both must use the same flavour, otherwise the mouse keys
   sit one column outward from the arrows and the hjkl muscle memory breaks.
-- Home-row-mod tuning: tapping term 200 ms, flow tap 150 ms, permissive hold on,
-  hold-on-other-key-press off, chordal hold on (`--hrm-tune`, on by default).
+- Home-row-mod tuning (.vil side): tapping term 200 ms, flow tap 150 ms,
+  permissive hold on, hold-on-other-key-press off, chordal hold on (`--hrm-tune`,
+  on by default). The **ZMK** side deliberately does not use a timer-first setup:
+  it uses urob's "timeless" HRMs (`hml`/`hmr`: balanced flavor, 280 ms,
+  quick-tap 175, require-prior-idle 150, positional lists per hand,
+  `hold-trigger-on-release`). RMK cannot do positional hold-taps, so the two
+  firmwares differ here by design.
 - Encoder push buttons stay `KC_MUTE` / `KC_BTN3`.
 - The user's own hand edits live in `USER_PATCHES` in the generator: screenshot
   `SGUI(KC_4)` and `LALT(KC_Z)` on the left outer column/palm, `CW_TOGG` and the

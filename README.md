@@ -105,6 +105,30 @@ Caveats, and why it is not a full Vial replacement:
 - Unlocking: this build has `ZMK_STUDIO_LOCKING` off, so no `&studio_unlock` key
   is needed.
 
+## Home-row mods: "timeless" configuration
+
+The ZMK build uses urob's *Timeless Home Row Mods* instead of a plain 200 ms
+timer — `hml`/`hmr` in `config/cornix.keymap`:
+
+| Property | Value | Effect |
+|---|---|---|
+| `flavor` | `balanced` | hold fires as soon as another key is pressed *and released* while the mod is held, so you rarely wait for the timer |
+| `tapping-term-ms` | 280 | only matters for a lone mod press or a same-hand mod+alpha chord |
+| `quick-tap-ms` | 175 | repeated taps stay taps |
+| `require-prior-idle-ms` | 150 | a mod pressed right after another key resolves as tap instantly (flow tap) |
+| `hold-trigger-key-positions` | opposite half + thumbs | a same-hand roll can never become a mod |
+| `hold-trigger-on-release` | on | same-hand mod+mod chording still works |
+
+`scripts/gen_zmk_keys.py` binds the left home-row mod-taps to `&hml` and the
+right ones to `&hmr` (they need mirrored position lists). Layer-taps keep
+Miryoku's `tap-preferred` with the `.vil` timings, since a thumb-held layer
+should not depend on the same-hand rule.
+
+The Vial/RMK firmware on the keyboard still uses tapping term 200 +
+permissive-hold + unilateral-tap: RMK's `MorseMode` is a single exclusive enum,
+so it cannot express positional hold-taps. Try `QMK Settings → Tapping Term 280`
+there if you want the timings to match more closely.
+
 ## Build locally (no GitHub Actions)
 
 `scripts/build-local.sh` reproduces what the workflow does: it creates a west

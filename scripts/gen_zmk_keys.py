@@ -104,7 +104,12 @@ def k_to_cell(k: int):
     return (7, 5 - (k - 35))             # right thumb fan
 
 
-def translate(code: str) -> str:
+# Miryoku K indices 10..14 are the left home row, 15..19 the right one; those
+# mod-taps use the per-hand positional hold-taps (&hml / &hmr) instead of &mt.
+LEFT_HAND_MTS = set(range(10, 15))
+
+
+def translate(code: str, k: int | None = None) -> str:
     if code == "KC_NO":
         return "&none"
     if code in MOUSE:
@@ -122,7 +127,9 @@ def translate(code: str) -> str:
         if mod in ("LG", "LC", "LA", "LS", "RG", "RC", "RA", "RS"):
             mod = {"LG": "LGUI", "LC": "LCTL", "LA": "LALT", "LS": "LSFT",
                    "RG": "RGUI", "RC": "RCTL", "RA": "RALT", "RS": "RSFT"}[mod]
-        return "&mt %s %s" % (mod, translate(m.group(2))[4:])
+        behavior = "&hml" if (k is not None and k in LEFT_HAND_MTS) else (
+            "&hmr" if k is not None else "&mt")
+        return "%s %s %s" % (behavior, mod, translate(m.group(2))[4:])
 
     m = re.fullmatch(r"LT(\d)\((KC_\w+)\)", code)
     if m:
@@ -166,7 +173,8 @@ def build(vil_path: Path):
         keys = []
         for k in range(40):
             cell = k_to_cell(k)
-            keys.append("&none" if cell is None else translate(layer[cell[0]][cell[1]]))
+            keys.append("&none" if cell is None
+                        else translate(layer[cell[0]][cell[1]], k))
         for r, c in EXTRA_CELLS:
             keys.append(translate(layer[r][c]))
         out[name] = keys
