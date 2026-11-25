@@ -7,7 +7,7 @@ Everything lives in `~/Downloads/cornix-zmk/`:
 
 | # | File | Size | Role |
 |---|---|---|---|
-| 0 | `0-s140-restore.uf2` | 304 K | SoftDevice s140 (RMK ships without one) |
+| – | `0-s140-restore.uf2` | 304 K | SoftDevice s140 — **not needed for these builds**, see below |
 | 1 | `1-settings-reset.uf2` | 114 K | wipes stored settings + BLE bonds |
 | 2 | `2-LEFT-central.uf2` | 526 K | left half — the BLE/USB central |
 | 3 | `3-RIGHT-peripheral.uf2` | 375 K | right half — peripheral |
@@ -16,11 +16,33 @@ Everything lives in `~/Downloads/cornix-zmk/`:
 Rollback kit (already prepared): `~/Downloads/cornix-rollback/` with the stock
 RMK left/right UF2s, a settings-reset image and the current `.vil`.
 
-**Why step 0 exists:** the stock RMK firmware was built without a SoftDevice.
-The ZMK halves are SoftDevice-based builds, so without step 0 they would boot
-into nothing (still recoverable via the bootloader, but pointless). The board's
-own recovery guide (`zmk-keyboard-cornix/bootloader/README.md`) says exactly
-this: restore s140 first, then flash ZMK.
+**Why step 0 is listed but skipped here:** the board module's recovery guide says
+to restore the SoftDevice s140 before flashing ZMK, because some published ZMK
+artifacts are SoftDevice builds (app at 0x26000). The artifacts built in this
+repo are **not**: the Cornix board devicetree uses `CONFIG_FLASH_LOAD_OFFSET=0x1000`
+(no SoftDevice), which is also where the stock RMK image lives
+(`cornix-left.uf2` -> 0x1000-0x6A500, verified from the UF2 block headers). So
+flashing s140 would only overwrite the app slot with SoftDevice code. Skip it,
+and only reach for it if you ever flash a SoftDevice-based ZMK build.
+
+## If macOS mounts the volume read-only
+
+Known on newer macOS: the volume mounts, `fsck` says it is clean, but every write
+fails with `Read-only file system` / `mount: invalid file system`. The bootloader's
+MSC handler parses **every** 512-byte write as a UF2 block and programs the
+address inside that block regardless of the LBA, so the FAT can be bypassed
+entirely - raw-write the file at the block device:
+
+```bash
+sudo scripts/flash-uf2-raw.sh ~/Downloads/cornix-zmk/1-settings-reset.uf2
+sudo scripts/flash-uf2-raw.sh ~/Downloads/cornix-zmk/2-LEFT-central.uf2
+```
+
+The script validates that the file is a chain of nRF52840 UF2 blocks, unmounts
+the read-only volume, `dd`s the file as raw MSC writes and waits for the device
+to reboot (a few `dd: Input/output error` lines at the end are the expected
+success case). If nothing was programmed it says so and the old firmware is
+untouched. `--dry-run` prints the block count and flash range without writing.
 
 ---
 
@@ -45,25 +67,24 @@ this: restore s140 first, then flash ZMK.
 
 ---
 
-## Left half (central) — files 0, 1, 2
+## Left half (central) — files 1, 2 (skip 0)
 
 1. Switch the keyboard on and plug **USB-C into the left half**.
 2. **Double-tap RESET.** Finder shows the volume **`cornix`**.
    If not: other cable/port, double-tap faster, or check with `ls /Volumes`.
-3. Drag **`0-s140-restore.uf2`** onto `NICENANO`. It copies, the drive unmounts,
-   the half reboots (it does nothing visible — that is expected).
-4. **Double-tap RESET** again → `cornix` → drag **`1-settings-reset.uf2`**.
-   This erases stored settings and old BLE bonds.
-5. **Double-tap RESET** again → `cornix` → drag **`2-LEFT-central.uf2`**.
-   This is the real firmware: ZMK + Miryoku (QWERTY base, vim nav/mouse layers).
+3. Drag **`1-settings-reset.uf2`** onto `cornix`. It copies, the drive unmounts
+   and the half reboots into a minimal firmware that erases stored settings and
+   old BLE bonds.
+4. **Double-tap RESET** again → `cornix` → now the real firmware.
+5. Drag **`2-LEFT-central.uf2`**: ZMK + Miryoku (QWERTY base, vim nav/mouse
+   layers). The half reboots into the keyboard.
 6. Unplug the left half.
 
-## Right half (peripheral) — files 0, 1, 3
+## Right half (peripheral) — files 1, 3 (skip 0)
 
 7. Plug **USB-C into the right half**.
-8. **Double-tap RESET** → `cornix` → drag **`0-s140-restore.uf2`**.
-9. **Double-tap RESET** → `cornix` → drag **`1-settings-reset.uf2`**.
-10. **Double-tap RESET** → `cornix` → drag **`3-RIGHT-peripheral.uf2`**.
+8. **Double-tap RESET** → `cornix` → drag **`1-settings-reset.uf2`**.
+9. **Double-tap RESET** → `cornix` → drag **`3-RIGHT-peripheral.uf2`**.
 11. Unplug, then **power-cycle both halves together** (switch off both, switch
     on both) so the two sides re-establish the split link.
 
