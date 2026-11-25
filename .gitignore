@@ -1,11 +1,12 @@
-# local build output and firmware artifacts
+# the finished UF2s ARE tracked (firmware/), everything below is not
 .build/
-firmware/
 build/
-*.uf2
 *.elf
 *.hex
 *.bin
+
+# vendor firmware collected by scripts/prepare-rollback.sh - not ours to publish
+firmware/rollback/
 
 # west workspace leftovers if someone builds in-tree
 .west/
@@ -13,7 +14,6 @@ zmk/
 zephyr/
 modules/
 tools/
-bootloader/modules/
 
 # editor / OS
 .DS_Store

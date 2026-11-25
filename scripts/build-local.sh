@@ -89,6 +89,28 @@ for t in "${TARGETS[@]}"; do
   esac
 done
 
+# --- collect the artifacts into the repo -----------------------------------
+# The west build trees stay in $WS (hundreds of MB); only the finished UF2s come
+# back here, so this repository is the single source of truth for flashing.
+artifact_name() {          # bash 3.2 on macOS: no associative arrays
+  case "$1" in
+    left)    echo left-central.uf2 ;;
+    right)   echo right-peripheral.uf2 ;;
+    ph_left) echo left-peripheral-dongle.uf2 ;;
+    dongle)  echo dongle-central.uf2 ;;
+    reset)   echo settings-reset.uf2 ;;
+  esac
+}
+mkdir -p "$REPO_DIR/firmware"
+for t in "${TARGETS[@]}"; do
+  src="$WS/build/$t/zephyr/zmk.uf2"
+  [ -f "$src" ] || continue
+  cp "$src" "$REPO_DIR/firmware/$(artifact_name "$t")"
+done
+( cd "$REPO_DIR/firmware" && shasum -a 256 ./*.uf2 > SHA256SUMS )
+
 echo
-echo "== UF2 files (double-tap RESET, drag onto the \`cornix\` volume, or use scripts/flash-uf2-raw.sh):"
-ls -1 "$WS"/build/*/zephyr/zmk.uf2 2>/dev/null || true
+echo "== firmware/ (source: $(git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || echo uncommitted))"
+ls -1 "$REPO_DIR"/firmware/*.uf2 2>/dev/null || true
+echo
+echo "flash with: sudo scripts/flash-uf2-raw.sh firmware/<file>.uf2"

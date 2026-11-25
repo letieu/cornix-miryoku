@@ -3,7 +3,7 @@
 # Collect everything needed to get back to the stock RMK + Vial firmware into one
 # folder, so a bad ZMK flash is a two-drag recovery.
 #
-#   scripts/prepare-rollback.sh              # -> ~/Downloads/cornix-rollback/
+#   scripts/prepare-rollback.sh              # -> firmware/rollback/ (git-ignored)
 #   OUT=~/Desktop/rollback scripts/prepare-rollback.sh
 #   ZIP=/path/to/V1.6.zip scripts/prepare-rollback.sh
 #
@@ -14,7 +14,7 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUT="${OUT:-$HOME/Downloads/cornix-rollback}"
+OUT="${OUT:-$REPO_DIR/firmware/rollback}"
 MODULE="${CORNIX_MODULE:-$REPO_DIR/../zmk-keyboard-cornix}"
 ZMK_WS="${ZMK_WORKSPACE:-$HOME/zmk-cornix-ws}"
 

@@ -31,6 +31,7 @@ prints the whole layout as a keyboard picture without needing Vial.
 | `config/cornix.conf` | Kconfig for the halves - enables `CONFIG_ZMK_POINTING` so the MOUSE layer's `&mmv`/`&msc`/`&mkp` behaviors exist |
 | `config/cornix_dongle_adapter.conf` | Same for the dongle build (the dongle is the central that sends the mouse reports) |
 | `build.yaml` | Artifacts: left, right, dongle-left, dongle, settings-reset |
+| `firmware/` | Prebuilt UF2s tracked in git (+ `SHA256SUMS`, provenance in `firmware/README.md`) |
 
 ## Mapping notes
 
@@ -156,7 +157,7 @@ stock UF2s are the only way home. They ship with the board module:
 `vial:f64c2b3c` and RMK source paths).
 
 ```bash
-./scripts/prepare-rollback.sh        # -> ~/Downloads/cornix-rollback/
+./scripts/prepare-rollback.sh        # -> firmware/rollback/ (git-ignored)
 ZIP=../zmk-keyboard-cornix/rmkfw/V1.6.99测试版.zip ./scripts/prepare-rollback.sh
 ```
 
