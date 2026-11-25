@@ -22,6 +22,8 @@ prints the whole layout as a keyboard picture without needing Vial.
 | `config/cornix.keymap` | Includes Miryoku; put layout options (`#define MIRYOKU_ALPHAS_QWERTY`, ...) here |
 | `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform |
 | `config/west.yml` | Pulls in ZMK main, the Cornix board module, and miryoku_zmk |
+| `config/cornix.conf` | Kconfig for the halves - enables `CONFIG_ZMK_POINTING` so the MOUSE layer's `&mmv`/`&msc`/`&mkp` behaviors exist |
+| `config/cornix_dongle_adapter.conf` | Same for the dongle build (the dongle is the central that sends the mouse reports) |
 | `build.yaml` | Artifacts: left, right, dongle-left, dongle, settings-reset |
 
 ## Mapping notes
@@ -46,6 +48,33 @@ If the keyboard is still on the stock **RMK + Vial** firmware you do not need
 any of the above: load `vial/cornix-miryoku-qwerty.vil` (or
 `-colemakdh.vil`) in Vial over USB and the keymap is written to the keyboard
 without flashing. See [vial/README.md](vial/README.md).
+
+## Mouse keys (ZMK path)
+
+Miryoku's MOUSE layer is built on ZMK's pointing behaviors, which are only
+compiled in with `CONFIG_ZMK_POINTING=y` - `config/cornix.conf` and
+`config/cornix_dongle_adapter.conf` enable it. Without them the layer is dead.
+
+Speed is a first-class setting in ZMK (`zmk,behavior-input-two-axis`), overridden
+at the end of `config/cornix.keymap`:
+
+| Property | ZMK default | Miryoku | Shipped here |
+|---|---|---|---|
+| `acceleration-exponent` | 1 | 1 | **1** (0 = constant, 2 = jerk) |
+| `time-to-max-speed-ms` | 300 | **1500** | **300** - full speed after 0.3 s |
+| `delay-ms` | – | 0 | **0** |
+| `trigger-period-ms` | 16 | 16 | **8** - ~125 reports/s |
+
+Max speed is the binding value: Miryoku sets `ZMK_POINTING_DEFAULT_MOVE_VAL`
+to **1250 px/s** (scroll 100), which is already ~1.7x what the RMK firmware does
+without an `ACL2` key held. To go beyond that you need your own behavior with a
+bigger value - the commented example at the bottom of `config/cornix.keymap`
+shows how.
+
+Trade-off against the Vial path: every mouse tweak here means a rebuild plus a
+flash of both halves (or the dongle), whereas the `.vil` route is instant but
+capped at RMK's compile-time timing. See [vial/README.md](vial/README.md#mouse-keys)
+for the RMK numbers.
 
 ## Flashing
 

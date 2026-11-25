@@ -21,7 +21,7 @@ skill at `~/code/personal/cornix-miryoku`.
 |---|---|
 | "change a key / layer / modifier / timing" (normal case) | regenerate or patch the `.vil`, user loads it in Vial over USB |
 | "why does this key do X" / "show me my layout" | `python3 vial/preview.py <file>` and explain |
-| "I want it on ZMK / flash firmware" | `config/cornix.keymap` + `config/includes/miryoku_cornix.h`, GitHub Actions build, UF2 over USB — mention it cannot be done over Bluetooth |
+| "I want it on ZMK / flash firmware" | `config/cornix.keymap` + `config/includes/miryoku_cornix.h`, GitHub Actions build, UF2 over USB — mention it cannot be done over Bluetooth. The ZMK path is also the only way to get real mouse-speed tuning: `&mmv` (`time-to-max-speed-ms`, `acceleration-exponent`, `delay-ms`, `trigger-period-ms`) needs `CONFIG_ZMK_POINTING=y` from `config/cornix.conf` |
 
 ## Standard workflow for a keymap change
 

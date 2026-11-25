@@ -21,3 +21,39 @@
 #include "../miryoku_zmk/miryoku/custom_config.h"
 #include "includes/miryoku_cornix.h"
 #include "../miryoku_zmk/miryoku/miryoku.dtsi"
+
+// Pointer feel.
+//
+// Miryoku ships ZMK's mouse-move behavior with max speed 1250 px/s, but ramps
+// from 0 over 1500 ms, so the first third of a second barely moves. Bring the
+// ramp down to 300 ms, drop the initial dead time and report twice as often
+// (8 ms instead of 16 ms). These override miryoku/miryoku_mousekeys.dtsi, which
+// is included above.
+//
+// Speed itself is per-binding: &mmv MOVE_UP == ZMK_POINTING_DEFAULT_MOVE_VAL
+// (1250 px/s), fixed in miryoku_zmk. Want more? Add your own behavior, e.g.
+//
+//   / {
+//     behaviors {
+//       mmvfast: mouse_move_fast {
+//         compatible = "zmk,behavior-input-two-axis";
+//         #binding-cells = <1>;
+//         x-input-code = <INPUT_REL_X>;
+//         y-input-code = <INPUT_REL_Y>;
+//         time-to-max-speed-ms = <250>;
+//         acceleration-exponent = <1>;
+//       };
+//     };
+//     mmvfast_input_listener: mmvfast_input_listener {
+//       compatible = "zmk,input-listener";
+//       device = <&mmvfast>;
+//     };
+//   };
+//
+// and bind `&mmvfast MOVE(0, -3000)` on a layer of your own.
+&mmv {
+  acceleration-exponent = <1>;
+  time-to-max-speed-ms = <300>;
+  delay-ms = <0>;
+  trigger-period-ms = <8>;
+};
