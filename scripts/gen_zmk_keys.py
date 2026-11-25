@@ -157,6 +157,14 @@ def translate(code: str, k: int | None = None) -> str:
     raise SystemExit("no ZMK translation for Vial keycode %r" % code)
 
 
+# Free cells that are put to work even though the .vil has nothing there: the
+# two left palm keys (Vial has no keycode for "show the battery") blink the
+# battery level and the connection state of both halves via zmk-rgbled-widget.
+PALM_ACTIONS = {
+    (3, 1): "&ind_bat",   # A09: show battery of both halves
+    (3, 2): "&ind_con",   # A10: show connection / profile state
+}
+
 # The 14 cells Miryoku does not use, in the order the mapping macro takes them
 # (A00..A13). These carry hand-placed keys such as the screenshot macro.
 EXTRA_CELLS = [
@@ -180,7 +188,10 @@ def build(vil_path: Path):
             keys.append("&none" if cell is None
                         else translate(layer[cell[0]][cell[1]], k))
         for r, c in EXTRA_CELLS:
-            keys.append(translate(layer[r][c]))
+            if layer[r][c] == "KC_NO" and (r, c) in PALM_ACTIONS:
+                keys.append(PALM_ACTIONS[(r, c)])
+            else:
+                keys.append(translate(layer[r][c]))
         out[name] = keys
     return out
 

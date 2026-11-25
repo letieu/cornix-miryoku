@@ -1,5 +1,5 @@
 c1e4d9e64ebf0e4a26e35b57846e24277740b846317205e89e7f0549faa7c770  ./dongle-central.uf2
-82f2d638440ef4cb18b247fc09b5da54d8ce10c18d658076f81e10e885417edf  ./left-central.uf2
-ca4169d202df93bf2a3d603632b1ad901ac4e0e5c1871feabbe426093a5d4902  ./left-peripheral-dongle.uf2
-006f2ef87f9e9159e1cee6516a7233bfec59418780bcc351b2853cbca32dd3fd  ./right-peripheral.uf2
+e39ab4cc5ecf3e375572649f7c7554e04312ad6d04a53007e3844da978e3cc02  ./left-central.uf2
+2193a1582a1d002ad7ad0926feae2d393df3fadc69bde691f3ddf3b68d528dd7  ./left-peripheral-dongle.uf2
+69f9515e091070e81f3fe1c4a764b4989b6b20beb67937b010a29f7f455bee9c  ./right-peripheral.uf2
 ce5a3f5e3ebe70dab9f1e20ade59a8df478d99f2e182798ca6396c0c99edf965  ./settings-reset.uf2

@@ -156,6 +156,21 @@ the widget turns the power rail off 1 s after the animation ends
 (`CONFIG_RGBLED_WIDGET_EXT_POWER_TIMEOUT_MS`). `CONFIG_ZMK_RGB_UNDERGLOW` stays
 off, so there is no red glow competing with the indicator.
 
+**Checking the battery** — three ways, in order of convenience:
+
+1. **Left palm, middle key (`&ind_bat`)** — blinks each half's battery colour in
+   turn (green ≥80 %, yellow ≥20 %, red below, threshold constants in
+   `CONFIG_RGBLED_WIDGET_BATTERY_LEVEL_*`). The central also reports the
+   peripheral's level (`CONFIG_RGBLED_WIDGET_BATTERY_SHOW_PERIPHERALS=y`), so one
+   press covers both halves; a magenta blink means that part is disconnected.
+2. **Left palm, inner key (`&ind_con`)** — connection/profile state (green/red/
+   blue/yellow/magenta = BT profile 0-4, cyan = USB).
+3. **Passive**: each half blinks its own level on boot, and below 5 % it blinks
+   red whenever the level changes.
+
+macOS only ever sees the *central's* battery (HID battery report), so for numbers
+use the LEDs; there is no per-half percentage in the host UI or in ZMK Studio.
+
 **Bluetooth** — the `.vil`'s `USER00`–`USER02` on the FUN outer column were the
 RMK custom keycodes for Bluetooth slots. The generator now maps them to ZMK's
 real behaviours (`&bt BT_SEL 0/1/2`), so profile switching works again; `&out

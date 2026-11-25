@@ -16,8 +16,8 @@
   &none, &none, &lt 6 ESC, &lt 4 SPACE, &lt 5 TAB,                        \
   &lt 8 RET, &lt 7 BSPC, &lt 9 DEL, &none, &none,                         \
   &kp LG(LS(N4)), &none, &none, &none, &none,                             \
-  &none, &kp C_MUTE, &mkp MB3, &kp LA(Z), &none,                          \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &kp LA(Z), &ind_bat,                       \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_EXTRA \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
@@ -29,8 +29,8 @@
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_TAP \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
@@ -42,8 +42,8 @@
   &none, &none, &kp ESC, &kp SPACE, &kp TAB,                              \
   &kp RET, &kp BSPC, &kp DEL, &none, &none,                               \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_BUTTON \
   &kp LG(Z), &kp LG(X), &kp LG(C), &kp LG(V), &kp LG(LS(Z)),              \
@@ -55,8 +55,8 @@
   &none, &none, &mkp MB3, &mkp MB1, &mkp MB2,                             \
   &mkp MB2, &mkp MB1, &mkp MB3, &none, &none,                             \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_NAV \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
@@ -68,8 +68,8 @@
   &none, &none, &none, &none, &none,                                      \
   &kp RET, &kp BSPC, &kp DEL, &none, &none,                               \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_MOUSE \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
@@ -81,7 +81,7 @@
   &none, &none, &none, &none, &none,                                      \
   &mkp MB2, &mkp MB1, &mkp MB3, &none, &none,                             \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
   &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_MEDIA \
@@ -94,8 +94,8 @@
   &none, &none, &none, &none, &none,                                      \
   &kp C_STOP, &kp C_PLAY_PAUSE, &kp C_MUTE, &none, &none,                 \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_NUM \
   &kp LBKT, &kp N7, &kp N8, &kp N9, &kp RBKT,                             \
@@ -107,8 +107,8 @@
   &none, &none, &kp DOT, &kp N0, &kp MINUS,                               \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_SYM \
   &kp LBKT, &kp LS(N7), &kp LS(N8), &kp LS(N9), &kp RBKT,                 \
@@ -120,8 +120,8 @@
   &none, &none, &kp LS(N9), &kp LS(N0), &kp LS(MINUS),                    \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
-  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &none, &ind_bat,                           \
+  &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_FUN \
   &kp F12, &kp F7, &kp F8, &kp F9, &kp PSCRN,                             \
@@ -133,5 +133,5 @@
   &none, &none, &kp K_APP, &kp SPACE, &kp TAB,                            \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &bt BT_SEL 0, &none, &bt BT_SEL 1,                        \
-  &none, &kp C_MUTE, &mkp MB3, &bt BT_SEL 2, &none,                       \
-  &none, &none, &none, &none                                              
+  &none, &kp C_MUTE, &mkp MB3, &bt BT_SEL 2, &ind_bat,                    \
+  &ind_con, &none, &none, &none                                           
