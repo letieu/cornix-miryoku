@@ -80,9 +80,9 @@ build() {
 
 for t in "${TARGETS[@]}"; do
   case "$t" in
-    left)    build left    cornix_left//zmk ;;
-    right)   build right   cornix_right//zmk ;;
-    ph_left) build ph_left cornix_ph_left//zmk ;;
+    left)    build left    cornix_left//zmk "" "-S studio-rpc-usb-uart" ;;
+    right)   build right   cornix_right//zmk "" "-S studio-rpc-usb-uart" ;;
+    ph_left) build ph_left cornix_ph_left//zmk "" "-S studio-rpc-usb-uart" ;;
     dongle)  build dongle  nice_nano//zmk cornix_dongle_adapter "-S studio-rpc-usb-uart -S nrf52840-nosd" ;;
     reset)   build reset   cornix_right//zmk settings_reset "-S studio-rpc-usb-uart -S nrf52840-nosd" ;;
     *) echo "unknown target: $t (left|right|ph_left|dongle|reset|all)" >&2; exit 1 ;;

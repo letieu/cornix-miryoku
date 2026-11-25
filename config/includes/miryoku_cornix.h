@@ -25,16 +25,22 @@
 
 #define XXX &none
 
+// Beyond Miryoku's 36 keys the board has 14 more cells (outer columns, the two
+// inner keys and the 3+3 palm keys). They are passed as A00..A13 so hand-placed
+// keys from the .vil survive: A00 is the far top-left, A08 the outer left palm,
+// etc. Empty cells are &none, exactly like the Vial layout.
 #define MIRYOKU_LAYOUTMAPPING_CORNIX( \
      K00, K01, K02, K03, K04,      K05, K06, K07, K08, K09, \
      K10, K11, K12, K13, K14,      K15, K16, K17, K18, K19, \
      K20, K21, K22, K23, K24,      K25, K26, K27, K28, K29, \
-     N30, N31, K32, K33, K34,      K35, K36, K37, N38, N39 \
+     N30, N31, K32, K33, K34,      K35, K36, K37, N38, N39, \
+     A00, A01, A02, A03, A04,      A05, A06, A07, A08, A09, \
+     A10, A11, A12, A13 \
 ) \
-XXX K00 K01 K02 K03 K04    K05 K06 K07 K08 K09 XXX \
-XXX K10 K11 K12 K13 K14    K15 K16 K17 K18 K19 XXX \
-XXX K20 K21 K22 K23 K24    XXX XXX    K25 K26 K27 K28 K29 XXX \
-XXX XXX XXX    K32 K33 K34    K35 K36 K37    XXX XXX XXX
+A00 K00 K01 K02 K03 K04    K05 K06 K07 K08 K09 A01 \
+A02 K10 K11 K12 K13 K14    K15 K16 K17 K18 K19 A03 \
+A04 K20 K21 K22 K23 K24    A06 A07    K25 K26 K27 K28 K29 A05 \
+A08 A09 A10    K32 K33 K34    K35 K36 K37    A11 A12 A13
 
 #endif
 

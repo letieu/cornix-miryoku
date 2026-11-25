@@ -14,7 +14,10 @@
   &lt 3 Z, &mt RALT X, &kp C, &kp V, &kp B,                               \
   &kp N, &kp M, &kp COMMA, &mt RALT DOT, &lt 3 SLASH,                     \
   &none, &none, &lt 6 ESC, &lt 4 SPACE, &lt 5 TAB,                        \
-  &lt 8 RET, &lt 7 BSPC, &lt 9 DEL, &none, &none
+  &lt 8 RET, &lt 7 BSPC, &lt 9 DEL, &none, &none,                         \
+  &kp LG(LS(N4)), &none, &none, &none, &none,                             \
+  &none, &kp C_MUTE, &mkp MB3, &kp LA(Z), &none,                          \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_EXTRA \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
@@ -24,7 +27,10 @@
   &lt 3 Z, &mt RALT X, &kp C, &kp V, &kp B,                               \
   &kp N, &kp M, &kp COMMA, &mt RALT DOT, &lt 3 SLASH,                     \
   &none, &none, &none, &none, &none,                                      \
-  &none, &none, &none, &none, &none
+  &none, &none, &none, &none, &none,                                      \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_TAP \
   &kp Q, &kp W, &kp E, &kp R, &kp T,                                      \
@@ -34,7 +40,10 @@
   &kp Z, &kp X, &kp C, &kp V, &kp B,                                      \
   &kp N, &kp M, &kp COMMA, &kp DOT, &kp SLASH,                            \
   &none, &none, &kp ESC, &kp SPACE, &kp TAB,                              \
-  &kp RET, &kp BSPC, &kp DEL, &none, &none
+  &kp RET, &kp BSPC, &kp DEL, &none, &none,                               \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_BUTTON \
   &kp LG(Z), &kp LG(X), &kp LG(C), &kp LG(V), &kp LG(LS(Z)),              \
@@ -44,7 +53,10 @@
   &kp LG(Z), &kp LG(X), &kp LG(C), &kp LG(V), &kp LG(LS(Z)),              \
   &kp LG(LS(Z)), &kp LG(V), &kp LG(C), &kp LG(X), &kp LG(Z),              \
   &none, &none, &mkp MB3, &mkp MB1, &mkp MB2,                             \
-  &mkp MB2, &mkp MB1, &mkp MB3, &none, &none
+  &mkp MB2, &mkp MB1, &mkp MB3, &none, &none,                             \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_NAV \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
@@ -54,7 +66,10 @@
   &none, &kp RALT, &to 7, &to 4, &none,                                   \
   &kp HOME, &kp PG_DN, &kp PG_UP, &kp END, &kp INS,                       \
   &none, &none, &none, &none, &none,                                      \
-  &kp RET, &kp BSPC, &kp DEL, &none, &none
+  &kp RET, &kp BSPC, &kp DEL, &none, &none,                               \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_MOUSE \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
@@ -64,7 +79,10 @@
   &none, &kp RALT, &to 8, &to 5, &none,                                   \
   &msc SCRL_LEFT, &msc SCRL_UP, &msc SCRL_DOWN, &msc SCRL_RIGHT, &none,   \
   &none, &none, &none, &none, &none,                                      \
-  &mkp MB2, &mkp MB1, &mkp MB3, &none, &none
+  &mkp MB2, &mkp MB1, &mkp MB3, &none, &none,                             \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_MEDIA \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
@@ -74,7 +92,10 @@
   &none, &kp RALT, &to 9, &to 6, &none,                                   \
   &none, &none, &none, &none, &none,                                      \
   &none, &none, &none, &none, &none,                                      \
-  &kp C_STOP, &kp C_PLAY_PAUSE, &kp C_MUTE, &none, &none
+  &kp C_STOP, &kp C_PLAY_PAUSE, &kp C_MUTE, &none, &none,                 \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_NUM \
   &kp LBKT, &kp N7, &kp N8, &kp N9, &kp RBKT,                             \
@@ -84,7 +105,10 @@
   &kp GRAVE, &kp N1, &kp N2, &kp N3, &kp BSLH,                            \
   &none, &to 7, &to 4, &kp RALT, &none,                                   \
   &none, &none, &kp DOT, &kp N0, &kp MINUS,                               \
-  &none, &none, &none, &none, &none
+  &none, &none, &none, &none, &none,                                      \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_SYM \
   &kp LBKT, &kp LS(N7), &kp LS(N8), &kp LS(N9), &kp RBKT,                 \
@@ -94,7 +118,10 @@
   &kp LS(GRAVE), &kp LS(N1), &kp LS(N2), &kp LS(N3), &kp LS(BSLH),        \
   &none, &to 8, &to 5, &kp RALT, &none,                                   \
   &none, &none, &kp LS(N9), &kp LS(N0), &kp LS(MINUS),                    \
-  &none, &none, &none, &none, &none
+  &none, &none, &none, &none, &none,                                      \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              
 
 #define MIRYOKU_LAYER_FUN \
   &kp F12, &kp F7, &kp F8, &kp F9, &kp PSCRN,                             \
@@ -104,4 +131,7 @@
   &kp F10, &kp F1, &kp F2, &kp F3, &kp PAUSE_BREAK,                       \
   &none, &to 9, &to 6, &kp RALT, &none,                                   \
   &none, &none, &kp K_APP, &kp SPACE, &kp TAB,                            \
-  &none, &none, &none, &none, &none
+  &none, &none, &none, &none, &none,                                      \
+  &none, &none, &none, &none, &none,                                      \
+  &none, &kp C_MUTE, &mkp MB3, &none, &none,                              \
+  &none, &none, &none, &none                                              

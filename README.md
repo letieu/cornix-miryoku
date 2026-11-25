@@ -32,6 +32,7 @@ prints the whole layout as a keyboard picture without needing Vial.
 | `config/cornix_dongle_adapter.conf` | Same for the dongle build (the dongle is the central that sends the mouse reports) |
 | `build.yaml` | Artifacts: left, right, dongle-left, dongle, settings-reset |
 | `firmware/` | Prebuilt UF2s tracked in git (+ `SHA256SUMS`, provenance in `firmware/README.md`) |
+| `config/cornix.conf` | Kconfig: pointing + ZMK Studio |
 
 ## Mapping notes
 
@@ -83,6 +84,26 @@ Trade-off against the Vial path: every mouse tweak here means a rebuild plus a
 flash of both halves (or the dongle), whereas the `.vil` route is instant but
 capped at RMK's compile-time timing. See [vial/README.md](vial/README.md#mouse-keys)
 for the RMK numbers.
+
+## ZMK Studio (Vial-like keymap UI)
+
+The firmware is built with `CONFIG_ZMK_STUDIO=y` and the `studio-rpc-usb-uart`
+snippet, so after flashing you can remap keys live - no rebuild, no reflash:
+
+1. Plug the **left half** in over USB.
+2. Open <https://zmk.studio/> in Chrome/Edge (or the native app for macOS).
+3. Pick the `Cornix` serial device, edit any key/layer, done.
+
+Caveats, and why it is not a full Vial replacement:
+
+- It assigns behaviors/keycodes to keys and renames layers. Combos, macros,
+  tap-dance contents, timing (tapping term, `&mmv`) and pointing config are
+  **devicetree only** - change those here in `config/` and rebuild.
+- Studio writes to NVS. Once you edit in Studio, the compiled keymap is ignored
+  until you press **"Restore Stock Settings"** in Studio - so treat the repo as
+  the source of truth, tweak in Studio only for experiments.
+- Unlocking: this build has `ZMK_STUDIO_LOCKING` off, so no `&studio_unlock` key
+  is needed.
 
 ## Build locally (no GitHub Actions)
 

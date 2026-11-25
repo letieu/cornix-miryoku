@@ -146,6 +146,15 @@ def translate(code: str) -> str:
     raise SystemExit("no ZMK translation for Vial keycode %r" % code)
 
 
+# The 14 cells Miryoku does not use, in the order the mapping macro takes them
+# (A00..A13). These carry hand-placed keys such as the screenshot macro.
+EXTRA_CELLS = [
+    (0, 0), (4, 0), (1, 0), (5, 0), (2, 0), (6, 0),      # outer columns
+    (2, 6), (5, 6),                                       # inner keys
+    (3, 0), (3, 1), (3, 2), (7, 2), (7, 1), (7, 0),       # palms
+]
+
+
 def build(vil_path: Path):
     data = json.loads(vil_path.read_text())
     grid = data["layout"]
@@ -158,6 +167,8 @@ def build(vil_path: Path):
         for k in range(40):
             cell = k_to_cell(k)
             keys.append("&none" if cell is None else translate(layer[cell[0]][cell[1]]))
+        for r, c in EXTRA_CELLS:
+            keys.append(translate(layer[r][c]))
         out[name] = keys
     return out
 
@@ -176,12 +187,12 @@ def render(layers) -> str:
     for name in LAYERS:
         keys = layers[name]
         lines.append("#define MIRYOKU_LAYER_%s \\" % name)
-        for i in range(0, 40, 5):
-            chunk = ", ".join(keys[i:i + 5])
-            if i < 35:
-                lines.append("  %-72s\\" % (chunk + ","))
-            else:
-                lines.append("  %s" % chunk)
+        body = keys[:40] + keys[40:]
+        for i in range(0, len(body), 5):
+            chunk = ", ".join(body[i:i + 5])
+            last = i + 5 >= len(body)
+            lines.append("  %-72s" % (chunk if last else chunk + ",") +
+                         ("" if last else "\\"))
         lines.append("")
     return "\n".join(lines)
 
