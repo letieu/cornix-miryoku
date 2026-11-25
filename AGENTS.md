@@ -93,6 +93,8 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   read-only (`fsck` says clean, `mount -o rw` refuses) so flash with
   `scripts/flash-uf2-raw.sh`, which exploits the bootloader parsing every
   512-byte write as a UF2 block.
+- The GitHub Action is deliberately disabled (`.github/workflows/build.yml.disabled`);
+  artifacts come from `scripts/build-local.sh` and live in `firmware/`.
 - Build locally with `scripts/build-local.sh` (Zephyr SDK **0.16.9** and a CMake
   v3 in `~/.venvs/zmk`; SDK 0.17.x breaks Zephyr 4.1's picolibc glue).
 

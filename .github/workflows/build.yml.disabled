@@ -1,0 +1,13 @@
+# DISABLED (renamed to .yml.disabled so GitHub Actions ignores it).
+# Rename back to build.yml to re-enable the cloud build; the same artifacts are
+# produced locally by scripts/build-local.sh and committed under firmware/.
+name: Build Miryoku Cornix firmware
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main

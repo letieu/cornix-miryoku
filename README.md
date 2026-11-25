@@ -234,7 +234,9 @@ a bad flash a two-minute problem instead of a lost evening.
 
 ## Flashing
 
-1. Build with GitHub Actions (push, or run the workflow manually).
+1. Build with `./scripts/build-local.sh all` (already done: `firmware/` holds the
+   images). The GitHub Action is **disabled** - `.github/workflows/build.yml.disabled`;
+   rename it back to `build.yml` to build in the cloud instead.
 2. Download the artifact zip for each role.
 3. USB-C cable into a half, double-tap RESET, drag the matching `.uf2` onto the
    `cornix` volume. Firmware is writeable over USB only, never over BLE.
