@@ -20,7 +20,29 @@
 
 #include "../miryoku_zmk/miryoku/custom_config.h"
 #include "includes/miryoku_cornix.h"
+
+// Layer contents generated from the Vial export the keyboard actually runs, so
+// the Cmd/Ctrl swap, the hand-tuned keys and the mouse layer match the .vil.
+// miryoku_layer_selection.h uses MIRYOKU_LAYER_<NAME> if it is already defined.
+#include "includes/miryoku_keys_generated.h"
+
 #include "../miryoku_zmk/miryoku/miryoku.dtsi"
+
+// Home-row-mod behaviour, matching the .vil's QMK settings: tapping term 200 ms,
+// quick tap / flow tap 150 ms, permissive hold on. (ZMK has no exact "flow tap";
+// require-prior-idle-ms is the closest, and it is what makes fast rolls tap.)
+&u_mt {
+  tapping-term-ms = <200>;
+  quick-tap-ms = <150>;
+  require-prior-idle-ms = <150>;
+  hold-trigger-on-release;
+};
+&u_lt {
+  tapping-term-ms = <200>;
+  quick-tap-ms = <150>;
+  require-prior-idle-ms = <150>;
+  hold-trigger-on-release;
+};
 
 // Pointer feel.
 //
