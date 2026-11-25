@@ -4,7 +4,7 @@
  "layout": [
   [
    [
-    "KC_NO",
+    "SGUI(KC_4)",
     "KC_Q",
     "KC_W",
     "KC_F",
@@ -31,7 +31,7 @@
     "KC_MUTE"
    ],
    [
-    "KC_NO",
+    "LALT(KC_Z)",
     "KC_NO",
     "KC_NO",
     "LT6(KC_ESCAPE)",
@@ -346,7 +346,7 @@
    ],
    [
     "KC_NO",
-    "CW_TOGG",
+    "KC_NO",
     "KC_RIGHT",
     "KC_UP",
     "KC_DOWN",
@@ -412,10 +412,10 @@
    [
     "KC_NO",
     "LGUI(KC_Z)",
-    "LGUI(KC_X)",
-    "LGUI(KC_C)",
-    "LGUI(KC_V)",
-    "LGUI(LSFT(KC_Z))",
+    "LCTL(KC_RIGHT)",
+    "LCTL(KC_UP)",
+    "LCTL(KC_DOWN)",
+    "LCTL(KC_LEFT)",
     -1
    ],
    [
@@ -431,8 +431,8 @@
     "KC_NO",
     "KC_NO",
     "KC_WH_R",
-    "KC_WH_U",
     "KC_WH_D",
+    "KC_WH_U",
     "KC_WH_L",
     -1
    ],
@@ -485,11 +485,11 @@
    ],
    [
     "KC_NO",
-    "RGB_VAI",
-    "RGB_SAI",
-    "RGB_HUI",
-    "RGB_MOD",
-    "RGB_TOG",
+    "KC_NO",
+    "KC_NO",
+    "KC_NO",
+    "KC_NO",
+    "KC_NO",
     -1
    ],
    [
@@ -679,7 +679,7 @@
     -1
    ],
    [
-    "KC_NO",
+    "USER00",
     "KC_F11",
     "KC_F4",
     "KC_F5",
@@ -688,7 +688,7 @@
     -1
    ],
    [
-    "KC_NO",
+    "USER01",
     "KC_F10",
     "KC_F1",
     "KC_F2",
@@ -697,7 +697,7 @@
     "KC_MUTE"
    ],
    [
-    "KC_NO",
+    "USER02",
     "KC_NO",
     "KC_NO",
     "KC_APP",

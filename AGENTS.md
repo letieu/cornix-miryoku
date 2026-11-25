@@ -30,6 +30,13 @@ changes) and the human docs in `README.md`, `vial/README.md`.
 - Home-row-mod tuning: tapping term 200 ms, flow tap 150 ms, permissive hold on,
   hold-on-other-key-press off, chordal hold on (`--hrm-tune`, on by default).
 - Encoder push buttons stay `KC_MUTE` / `KC_BTN3`.
+- The user's own hand edits live in `USER_PATCHES` in the generator: screenshot
+  `SGUI(KC_4)` and `LALT(KC_Z)` on the left outer column/palm, `CW_TOGG` and the
+  MEDIA `RGB_*` keys blanked, `LCTL(KC_LEFT/UP/DOWN/RIGHT)` on the MOUSE layer's
+  top row (macOS window keys instead of clipboard), scroll direction flipped on
+  the MOUSE home row, and `USER00`–`USER02` on the FUN outer column.
+  `vial/current.vil` is the export they came from — keep it in sync when the user
+  hands over a new one instead of hand-editing a generated `.vil`.
 - **Mouse keys are tuned faster than RMK's defaults** (`--mouse-tune`): delay 40 ms,
   interval 10 ms, step 10 px, max speed 5x, and the left thumbs on the MOUSE layer
   hold `KC_ACL0/ACL1/ACL2` so speed can be halved/boosted on the fly.

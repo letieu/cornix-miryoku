@@ -41,9 +41,9 @@ column per hand has nothing on it:
 | Cornix position | Miryoku role |
 |---|---|
 | columns 1–5 of each half (pinkie → inner) | 5 Miryoku columns per hand |
-| **column 0 of each half** (leftmost / rightmost of the keyboard) | `KC_NO` — the empty column is on the outside, the centre stays fully usable. Regenerate with `--drop inner` to empty the columns next to the centre gap instead |
+| **column 0 of each half** (leftmost / rightmost of the keyboard) | Miryoku has no use for it, so it stays empty - except two hand-placed keys on the left: `SGUI(KC_4)` (⌘⇧4 screenshot) on the top row and `LALT(KC_Z)` (⌥Z) on the outer palm key. Regenerate with `--drop inner` to empty the columns next to the centre gap instead |
 | thumb fans columns 3,4,5 | Esc(Media) Space(Nav) Tab(Mouse) ǀ Enter(Sym) Bspc(Num) Del(Fun) |
-| 3+3 palm keys, inner keys | `KC_NO` — free real estate, drop something useful in via Vial |
+| 3+3 palm keys, inner keys | mostly `KC_NO` - free real estate, drop something useful in via Vial (the shared list in `make_miryoku_vil.py`, `USER_PATCHES`, carries the ones already in use: `LALT(KC_Z)` on the left palm, `USER00`–`USER02` on the FUN layer's outer column) |
 | 2 encoder push buttons | kept as `KC_MUTE` / `KC_BTN3` on every layer (they were that in your export) |
 
 Layers: `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`
@@ -81,22 +81,42 @@ speed) - which works even if the firmware ignores the settings ids. Disable with
 ## Known gaps (nothing fatal, all fixable in the Vial UI)
 
 - Miryoku's `&bt` / output-toggle keys are `KC_NO`: RMK's custom keycodes come
-  from the firmware, so pick them from Vial's **Custom** section (your current
-  keymap uses `USER00`–`USER02` on its BT layer — those are the same slots).
+  from the firmware, so pick them from Vial's **Custom** section (the FUN layer's
+  outer column already uses `USER00`–`USER02` for that).
 - `U_EP_TOG` (external power) has no equivalent → `KC_NO`.
-- `CW_TOGG` (caps word) and `RGB_*` keys are written; if the RMK build does not
-  implement them they simply do nothing.
+- `CW_TOGG` (caps word) is blanked to `KC_NO` in the shipped files, and so are the
+  `RGB_*` keys on the MEDIA layer: this RMK build does not implement them.
 - The EXTRA layer equals BASE with empty thumbs, which is exactly what
   `miryoku_zmk` generates for QWERTY/Colemak-DH.
 - Clipboard keys use the macOS variant (`LGUI` = ⌘). For Windows/Linux edit
   `CLIPBOARD` in `make_miryoku_vil.py` to `LCTL(...)` and regenerate.
 
+## Hand edits that live in the generator
+
+Changes made in Vial / vial.rocks are recorded in `USER_PATCHES` in
+`make_miryoku_vil.py`, so a regeneration reproduces the keymap that is actually
+on the keyboard instead of silently reverting to stock Miryoku:
+
+| Layer | Key | Keycode | What it is |
+|---|---|---|---|
+| BASE | top row, outer-left | `SGUI(KC_4)` | ⌘⇧4 screenshot |
+| BASE | outer palm, left | `LALT(KC_Z)` | ⌥Z |
+| NAV | home row, outer-left | `KC_NO` | caps word removed |
+| MOUSE | top row (right hand) | `LCTL(KC_LEFT/UP/DOWN/RIGHT)` | macOS window / desktop-space keys instead of the clipboard shortcuts |
+| MOUSE | home row (right hand) | `KC_WH_D`, `KC_WH_U` | scroll direction flipped (ids 3 and 4 of the right home row) |
+| MEDIA | top row (right hand) | `KC_NO` | `RGB_*` blanked |
+| FUN | outer column, left | `USER00`–`USER02` | firmware custom keycodes |
+
+Add a row there rather than editing a generated `.vil` by hand, otherwise the
+next regeneration loses it. `vial/current.vil` is the export these were taken
+from and doubles as a safe `--template`.
+
 ## Regenerate
 
 ```bash
-# exactly what was shipped
+# exactly what was shipped (vial/current.vil is the export used as template)
 python3 make_miryoku_vil.py --alphas qwerty --swap gui,ctrl --nav vi --mouse vi \
-        --template ~/Downloads/a.vil -o cornix-miryoku-qwerty.vil
+        --template current.vil -o cornix-miryoku-qwerty.vil
 
 # variations
 python3 make_miryoku_vil.py --alphas colemakdh --swap gui,ctrl --nav vi --mouse vi

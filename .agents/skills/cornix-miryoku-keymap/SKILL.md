@@ -73,6 +73,24 @@ Layer definitions come from the vendored
 `untranslated Miryoku token: …` when Miryoku grows a keycode it cannot map — add
 the mapping to `KEYS`/`MISC`/`CLIPBOARD` in the script.
 
+### The user's hand edits: `USER_PATCHES`
+
+Anything the user changed by hand in Vial or vial.rocks is recorded in the
+`USER_PATCHES` dict in `make_miryoku_vil.py` (`{layer name: {(row, col): keycode}}`)
+and applied on top of every generated layer, for all alphas sets. Currently:
+BASE `(0,0)=SGUI(KC_4)` screenshot, `(3,0)=LALT(KC_Z)`; NAV `(5,1)=KC_NO`
+(caps word); MOUSE top row `LCTL(KC_LEFT/UP/DOWN/RIGHT)`, home row scroll
+`KC_WH_D`/`KC_WH_U` flipped; MEDIA `RGB_*` blanked; FUN outer column
+`USER00`–`USER02`.
+
+When the user hands over a fresh export (`vial/current.vil` or a `~/Downloads`
+file), diff it against the generated file **after normalising keycode aliases**
+(`KC_LCTRL`==`KC_LCTL`, `KC_LSHIFT`==`KC_LSFT`, `KC_INSERT`==`KC_INS`,
+`KC_PGDOWN`==`KC_PGDN`, `KC_LBRACKET`==`KC_LBRC`, `KC_PSCREEN`==`KC_PSCR`,
+`KC_APPLICATION`==`KC_APP`, `SGUI(KC_X)`==`LGUI(LSFT(KC_X))`) — Vial rewrites
+those spellings, they are not real changes. Encode the real differences in
+`USER_PATCHES` rather than editing the `.vil`.
+
 ## Pitfalls that have already bitten
 
 - Vial works over **USB only**; Bluetooth is not a config path.
@@ -84,6 +102,11 @@ the mapping to `KEYS`/`MISC`/`CLIPBOARD` in the script.
   ignored by the firmware build, the ACL keys still work.
 - `--nav vi` without `--mouse vi` leaves the mouse keys one column outward from
   the arrows (the user noticed immediately); always pass both.
+- Keycode spellings in an export differ from the generator's (`KC_LCTRL` vs
+  `KC_LCTL`, `SGUI(Z)` vs `LGUI(LSFT(KC_Z))`); normalise before diffing, then put
+  real changes into `USER_PATCHES`.
+- `USER00`–`USER31` (Vial's Custom section) and `SGUI(...)` are accepted by the
+  validator; add new wrapper families there if a patch uses them.
 - The dead column is **deliberate** (user preference, outer columns). Do not
   "fix" it back to the centre.
 - Miryoku's `&bt` / output-toggle / external-power keys have no Vial keycode;

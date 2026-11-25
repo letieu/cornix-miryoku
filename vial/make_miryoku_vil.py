@@ -85,6 +85,43 @@ MOUSE_SETTINGS = {
 # it to roughly a quarter): held with the left thumb while the right hand moves.
 MOUSE_ACCEL_KEYS = {(3, 3): "KC_ACL0", (3, 4): "KC_ACL1", (3, 5): "KC_ACL2"}
 
+# Hand edits the user made in Vial / vial.rocks that must survive a regeneration.
+# They are applied on top of the Miryoku layers for both alphas sets, so a fresh
+# run of this script reproduces the keymap that is actually on the keyboard.
+USER_PATCHES = {
+    "BASE": {
+        (0, 0): "SGUI(KC_4)",      # Cmd+Shift+4: screenshot to the Desktop
+        (3, 0): "LALT(KC_Z)",      # Option+Z
+    },
+    "NAV": {
+        (5, 1): "KC_NO",           # CW_TOGG cleared: caps-word is not used
+    },
+    "MOUSE": {
+        # clipboard slots replaced by the macOS Ctrl+arrow window/space keys
+        (4, 2): "LCTL(KC_RIGHT)",
+        (4, 3): "LCTL(KC_UP)",
+        (4, 4): "LCTL(KC_DOWN)",
+        (4, 5): "LCTL(KC_LEFT)",
+        # scroll direction flipped (natural scrolling)
+        (6, 3): "KC_WH_D",
+        (6, 4): "KC_WH_U",
+    },
+    "MEDIA": {
+        # RGB keys are no-ops on this RMK build, so they were blanked in Vial
+        (4, 1): "KC_NO",
+        (4, 2): "KC_NO",
+        (4, 3): "KC_NO",
+        (4, 4): "KC_NO",
+        (4, 5): "KC_NO",
+    },
+    "FUN": {
+        # outer column: Vial "Custom" keycodes USER00..USER02
+        (1, 0): "USER00",
+        (2, 0): "USER01",
+        (3, 0): "USER02",
+    },
+}
+
 # Miryoku layer order, must match U_BASE..U_FUN in miryoku_layer_list.h
 LAYER_ORDER = ["BASE", "EXTRA", "TAP", "BUTTON", "NAV", "MOUSE", "MEDIA",
                "NUM", "SYM", "FUN"]
@@ -357,8 +394,9 @@ def validate(layers, names_path):
                 if re.match(r"^[LR][A-Z]{3}_T\(KC_\w+\)$", k) or \
                    re.match(r"^LT[0-9]+\(KC_\w+\)$", k) or \
                    re.match(r"^TO\([0-9]+\)$", k) or \
-                   re.match(r"^(LSFT|LGUI|LCTL|LALT|RSFT|RGUI|RCTL|RALT)\(KC_\w+\)$", k) or \
-                   re.match(r"^LGUI\(LSFT\(KC_\w+\)\)$", k):
+                   re.match(r"^(LSFT|LGUI|LCTL|LALT|RSFT|RGUI|RCTL|RALT|SGUI)\(KC_\w+\)$", k) or \
+                   re.match(r"^LGUI\(LSFT\(KC_\w+\)\)$", k) or \
+                   re.match(r"^USER[0-9]{2}$", k):
                     continue
                 bad.append((li, r, c, k))
     return bad
@@ -418,6 +456,10 @@ def main():
     for layer in layers:
         for (r, c), value in zip(ENCODER_KEYS, clicks):
             layer[r][c] = value
+
+    for layer_name, cells in USER_PATCHES.items():
+        for (r, c), code in cells.items():
+            layers[LAYER_INDEX[layer_name]][r][c] = code
 
     template = json.loads(args.template.read_text()) if args.template else None
     if template is not None:
