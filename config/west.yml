@@ -17,5 +17,10 @@ manifest:
       remote: hitsmaxft
       revision: main
 
+    # Battery / split-connection LED indicators (cornix_indicator shield)
+    - name: zmk-rgbled-widget
+      remote: hitsmaxft
+      revision: main
+
   self:
     path: config

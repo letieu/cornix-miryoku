@@ -20,12 +20,10 @@ prints the whole layout as a keyboard picture without needing Vial.
 | File | Purpose |
 |---|---|
 | `config/cornix.keymap` | Self-contained keymap: generated layers, HRMs, mouse speed, encoders |
-| `config/cornix_left.conf` etc. | Per-half Kconfig: RGB underglow + EXT_POWER (kept out of `cornix.conf`, which the dongle also picks up) |
-| `config/cornix_left.overlay` etc. | Per-half devicetree overlay -> `config/includes/cornix_leds.overlay` (enables the WS2812 strip) |
 | `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform (outer columns dead) |
 | `config/includes/miryoku_keys_generated.h` | **Generated** layer contents from `vial/cornix-miryoku-qwerty.vil` - do not edit by hand |
 | `scripts/gen_zmk_keys.py` | `.vil` -> `MIRYOKU_LAYER_*` macros, so the ZMK build carries the Vial layout |
-| `scripts/build-local.sh` | Local west build of all five artifacts (see below) |
+| `scripts/build-local.sh` | Local west build of all five artifacts (halves get `-DSHIELD=cornix_indicator`) |
 | `scripts/flash-uf2-raw.sh` | Flash a UF2 when macOS mounts the bootloader volume read-only |
 | `scripts/prepare-rollback.sh` | Collects the stock RMK UF2s + current `.vil` into a rollback folder |
 | `FLASHING.md` | Step-by-step flashing / recovery guide for both halves |
@@ -149,20 +147,14 @@ via a small `zmk,behavior-sensor-rotate-var` wrapper around `&msc`. The knob
 pushes are the two inner keys (`&kp C_MUTE`, `&mkp MB3`), carried over from the
 `.vil`.
 
-**LEDs** — the board ships two WS2812 chips on SPI3 behind an `EXT_POWER` rail,
-both `status = "disabled"` in the board devicetree. `config/includes/cornix_leds.overlay`
-turns the strip and the power rail on and sets `zmk,underglow`; the per-half
-`.conf` files add:
-
-```
-CONFIG_ZMK_RGB_UNDERGLOW=y   CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=y
-CONFIG_ZMK_RGB_UNDERGLOW_ON_START=y   CONFIG_WS2812_STRIP_SPI=y
-CONFIG_ZMK_EXT_POWER=y   CONFIG_SPI=y
-```
-
-The `.vil` has the RGB keycodes blanked, so there are no RGB keys in the layers;
-add `&rgb_ug RGB_TOG` / `RGB_BRI` / `RGB_EFF` in Vial (they exist there) and
-regenerate, or remap them in ZMK Studio.
+**LEDs** — the board has two WS2812 chips per half on SPI3 behind an `EXT_POWER`
+rail, both `status = "disabled"` in the board devicetree. Rather than a
+meaningless always-on underglow, the halves are built with the board's
+**`cornix_indicator`** shield and the `zmk-rgbled-widget` module
+(`config/west.yml`): the LEDs show battery level and split-connection state, and
+the widget turns the power rail off 1 s after the animation ends
+(`CONFIG_RGBLED_WIDGET_EXT_POWER_TIMEOUT_MS`). `CONFIG_ZMK_RGB_UNDERGLOW` stays
+off, so there is no red glow competing with the indicator.
 
 **Bluetooth** — the `.vil`'s `USER00`–`USER02` on the FUN outer column were the
 RMK custom keycodes for Bluetooth slots. The generator now maps them to ZMK's

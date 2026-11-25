@@ -87,12 +87,12 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   layers come from `scripts/gen_zmk_keys.py` and each layer carries
   `sensor-bindings`, which Miryoku's node cannot provide - without it the rotary
   encoders do nothing. Encoders: left = volume, right = `&msc` wheel.
-- LEDs: two WS2812 on SPI3 behind `EXT_POWER`, both disabled in the board
-  devicetree; `config/includes/cornix_leds.overlay` (included by the per-half
-  `cornix_*.overlay`) enables them, and `config/cornix_*.conf` adds the RGB
-  underglow Kconfig. Keep the RGB settings out of `cornix.conf`: the dongle build
-  picks that file up too and has no strip (build error "A zmk,underglow chosen
-  node must be declared").
+- LEDs: two WS2812 per half on SPI3 behind `EXT_POWER`. They are **indicators**,
+  not underglow: the halves are built with `-DSHIELD=cornix_indicator` and the
+  `zmk-rgbled-widget` module (battery + split connection, power rail switches off
+  after 1 s). `CONFIG_ZMK_RGB_UNDERGLOW` stays off on purpose - turning it on
+  just paints all LEDs red, which means nothing. Earlier hand-rolled
+  `config/cornix_*.conf`/`.overlay` LED files were removed for this reason.
 - Bluetooth: the `.vil`'s `USER00`-`USER02` are RMK custom keycodes; the generator
   maps them to `&bt BT_SEL 0/1/2` so profile switching works on ZMK.
 - Split roles: the **left half is the central** and holds keymap + transform, so

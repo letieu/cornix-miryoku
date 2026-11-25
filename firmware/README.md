@@ -5,16 +5,17 @@ same bits as `gh workflow run` would produce (only the compiler host differs).
 
 | File | Board / shield | Flash / RAM | Use |
 |---|---|---|---|
-| `left-central.uf2` | `cornix_left//zmk` + `studio-rpc-usb-uart` | 274 K / 80 K | left half, standard split — **the central** |
-| `right-peripheral.uf2` | `cornix_right//zmk` | 198 K / 42 K | right half (peripheral) |
-| `left-peripheral-dongle.uf2` | `cornix_ph_left//zmk` | 198 K / 42 K | left half when a dongle is the central |
+| `left-central.uf2` | `cornix_left//zmk` + `studio-rpc-usb-uart` | 276 K / 82 K | left half, standard split — **the central** |
+| `right-peripheral.uf2` | `cornix_right//zmk` + `cornix_indicator` | 200 K / 42 K | right half (peripheral) |
+| `left-peripheral-dongle.uf2` | `cornix_ph_left//zmk` | 200 K / 42 K | left half when a dongle is the central |
 | `dongle-central.uf2` | `nice_nano//zmk` + `cornix_dongle_adapter` | 264 K / 82 K | USB dongle build (display off) |
-| `settings-reset.uf2` | `cornix_right//zmk` + `settings_reset` | 66 K | clears NVS / BLE bonds |
+| `settings-reset.uf2` | `cornix_right//zmk` + `settings_reset` | 58 K | clears NVS / BLE bonds |
 
 Contents: ZMK `main` + `zmk-keyboard-cornix` (no `miryoku_zmk` needed any more),
 layers generated from `vial/cornix-miryoku-qwerty.vil` (`scripts/gen_zmk_keys.py`),
 urob-style timeless home-row mods, `&mmv` mouse-speed override, rotary encoders
-(volume / wheel), RGB underglow on the two WS2812 LEDs, Bluetooth profile keys,
+(volume / wheel), battery/connection LED indicators (`cornix_indicator` shield),
+Bluetooth profile keys,
 and **ZMK Studio** for live remapping over USB. No SoftDevice — the image links at `0x1000`,
 like the stock RMK firmware.
 
