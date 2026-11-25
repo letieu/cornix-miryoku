@@ -31,7 +31,8 @@ Only `layout` (the keymap) differs.
    in Vial's UI afterwards (each change is saved to the keyboard as well).
 
 Before loading, keep a backup of your current keymap: **File → Save current
-layout**. (`~/Downloads/a.vil` from this session is such a backup.)
+layout**. (`vial/current.vil` is the export this layout came from; `scripts/prepare-rollback.sh`
+keeps a copy next to the stock firmware.)
 
 ## What Miryoku maps to on the Cornix
 

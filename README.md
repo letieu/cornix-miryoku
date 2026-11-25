@@ -19,8 +19,14 @@ prints the whole layout as a keyboard picture without needing Vial.
 
 | File | Purpose |
 |---|---|
-| `config/cornix.keymap` | Includes Miryoku; put layout options (`#define MIRYOKU_ALPHAS_QWERTY`, ...) here |
-| `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform |
+| `config/cornix.keymap` | Includes Miryoku, the generated layers and the mouse/hold-tap overrides |
+| `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform (outer columns dead) |
+| `config/includes/miryoku_keys_generated.h` | **Generated** layer contents from `vial/cornix-miryoku-qwerty.vil` - do not edit by hand |
+| `scripts/gen_zmk_keys.py` | `.vil` -> `MIRYOKU_LAYER_*` macros, so the ZMK build carries the Vial layout |
+| `scripts/build-local.sh` | Local west build of all five artifacts (see below) |
+| `scripts/flash-uf2-raw.sh` | Flash a UF2 when macOS mounts the bootloader volume read-only |
+| `scripts/prepare-rollback.sh` | Collects the stock RMK UF2s + current `.vil` into a rollback folder |
+| `FLASHING.md` | Step-by-step flashing / recovery guide for both halves |
 | `config/west.yml` | Pulls in ZMK main, the Cornix board module, and miryoku_zmk |
 | `config/cornix.conf` | Kconfig for the halves - enables `CONFIG_ZMK_POINTING` so the MOUSE layer's `&mmv`/`&msc`/`&mkp` behaviors exist |
 | `config/cornix_dongle_adapter.conf` | Same for the dongle build (the dongle is the central that sends the mouse reports) |
@@ -28,8 +34,9 @@ prints the whole layout as a keyboard picture without needing Vial.
 
 ## Mapping notes
 
-Miryoku uses 5 columns per hand; the Cornix has 6, so the innermost main column
-is `&none`, plus the two inner keys and the 3+3 palm keys are unused:
+Miryoku uses 5 columns per hand; the Cornix has 6, so the **outermost** column of
+each half is `&none` (same as the Vial layout - keep it that way), plus the two
+inner keys and the 3+3 palm keys are unused:
 
 ```
    pinkie ring middle index inner  x   x  inner index middle ring pinkie
@@ -156,8 +163,8 @@ ZIP=../zmk-keyboard-cornix/rmkfw/V1.6.99测试版.zip ./scripts/prepare-rollback
 That folder ends up with the stock left/right UF2s, a ZMK `settings_reset` UF2, the
 current `.vil` and `ROLLBACK.txt` with checksums. Recovery is then:
 
-1. Per half: USB-C in, **double-tap RESET**, a `NICENANO` volume appears, drag the
-   UF2 on. The bootloader sits in a protected part of the chip and no UF2 here
+1. Per half: USB-C in, **double-tap RESET**, a volume named `cornix` appears, drag
+   the UF2 on (or use `scripts/flash-uf2-raw.sh` if macOS mounts it read-only). The bootloader sits in a protected part of the chip and no UF2 here
    touches it, so this escape hatch works even if the flashed firmware is
    completely dead (no USB, no BLE, nothing).
 2. If you came from ZMK, flash `settings_reset` to one half first, then the stock
@@ -176,6 +183,6 @@ a bad flash a two-minute problem instead of a lost evening.
 1. Build with GitHub Actions (push, or run the workflow manually).
 2. Download the artifact zip for each role.
 3. USB-C cable into a half, double-tap RESET, drag the matching `.uf2` onto the
-   `NICENANO` volume. Firmware is writeable over USB only, never over BLE.
+   `cornix` volume. Firmware is writeable over USB only, never over BLE.
 4. If you are switching firmware family (e.g. from stock RMK), flash
    `cornix_miryoku_reset.uf2` to a half first, then its firmware, then re-pair.

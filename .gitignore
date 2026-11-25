@@ -1,2 +1,20 @@
+# local build output and firmware artifacts
 .build/
 firmware/
+build/
+*.uf2
+*.elf
+*.hex
+*.bin
+
+# west workspace leftovers if someone builds in-tree
+.west/
+zmk/
+zephyr/
+modules/
+tools/
+bootloader/modules/
+
+# editor / OS
+.DS_Store
+.zmk/

@@ -21,7 +21,7 @@ skill at `~/code/personal/cornix-miryoku`.
 |---|---|
 | "change a key / layer / modifier / timing" (normal case) | regenerate or patch the `.vil`, user loads it in Vial over USB |
 | "why does this key do X" / "show me my layout" | `python3 vial/preview.py <file>` and explain |
-| "I want it on ZMK / flash firmware" | `config/cornix.keymap` + `config/includes/miryoku_cornix.h`, GitHub Actions build, UF2 over USB — mention it cannot be done over Bluetooth. The ZMK path is also the only way to get real mouse-speed tuning: `&mmv` (`time-to-max-speed-ms`, `acceleration-exponent`, `delay-ms`, `trigger-period-ms`) needs `CONFIG_ZMK_POINTING=y` from `config/cornix.conf` |
+| "I want it on ZMK / flash firmware" | `config/cornix.keymap` + `config/includes/miryoku_cornix.h`, GitHub Actions or `scripts/build-local.sh`, UF2 over USB — never over Bluetooth. Layers come from `scripts/gen_zmk_keys.py` (generated from the `.vil`), so keep the `.vil` as the source of truth. The ZMK path is also the only way to get real mouse-speed tuning: `&mmv` (`time-to-max-speed-ms`, `acceleration-exponent`, `delay-ms`, `trigger-period-ms`) needs `CONFIG_ZMK_POINTING=y` from `config/cornix.conf` |
 
 ## Standard workflow for a keymap change
 
@@ -121,4 +121,11 @@ those spellings, they are not real changes. Encode the real differences in
   (`USER00…` on this firmware). `CW_TOGG`, `RGB_*`, `QK_BOOT` are written but may
   be no-ops depending on the RMK build.
 - The `.vil` cannot carry per-key tapping-term overrides; HRM behaviour is the
-  global QMK settings block plus whatever the firmware implements.
+  global QMK settings block plus whatever the firmware implements. On the ZMK
+  side the same integers live on `&u_mt`/`&u_lt` in `config/cornix.keymap`.
+- ZMK flashing: the bootloader volume is `cornix` (not `NICENANO`), the firmware
+  is no-SoftDevice so the s140 restore is unnecessary, and newer macOS mounts
+  the volume read-only - use `scripts/flash-uf2-raw.sh`. Only the left/central
+  half needs a keymap change.
+- `scripts/gen_zmk_keys.py` raises on a Vial keycode it cannot translate; add
+  the mapping there instead of hand-editing `config/includes/miryoku_keys_generated.h`.

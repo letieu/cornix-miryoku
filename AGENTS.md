@@ -67,6 +67,30 @@ changes) and the human docs in `README.md`, `vial/README.md`.
 6. Keep the shipped filenames: `vial/cornix-miryoku-qwerty.vil` and
    `vial/cornix-miryoku-colemakdh.vil`. Commit changes to this repo.
 
+## ZMK path (alternative firmware)
+
+- The ZMK layers are **generated from the Vial export**: `python3
+  scripts/gen_zmk_keys.py` writes `config/includes/miryoku_keys_generated.h`
+  (10 `MIRYOKU_LAYER_*` macros) from `vial/cornix-miryoku-qwerty.vil`, so the
+  Cmd/Ctrl swap, hand edits and mouse tweaks stay identical on both sides. Never
+  hand-edit the generated header; edit the `.vil` (or `USER_PATCHES`) and
+  regenerate. `--vil <file> -o <header>` switches alphas.
+- ZMK has no equivalent for RMK's `KC_ACL*` and `USERnn`, so those become
+  `&none`; mouse speed is `ZMK_POINTING_DEFAULT_MOVE_VAL` (1250 px/s) plus the
+  `&mmv` override in `config/cornix.keymap` (300 ms ramp, 8 ms reports).
+- Split roles: the **left half is the central** and holds keymap + transform, so
+  a mapping change only needs the left half reflashed. The dongle build is the
+  central in a dongle setup.
+- Bootloader facts (learned the hard way): the volume is named `cornix`, not
+  `NICENANO`; the firmware is **no-SoftDevice** (`FLASH_LOAD_OFFSET=0x1000`, the
+  stock RMK image is at 0x1000 too) so the s140 restore in the board module's
+  `bootloader/README.md` is *not* needed; on newer macOS the volume mounts
+  read-only (`fsck` says clean, `mount -o rw` refuses) so flash with
+  `scripts/flash-uf2-raw.sh`, which exploits the bootloader parsing every
+  512-byte write as a UF2 block.
+- Build locally with `scripts/build-local.sh` (Zephyr SDK **0.16.9** and a CMake
+  v3 in `~/.venvs/zmk`; SDK 0.17.x breaks Zephyr 4.1's picolibc glue).
+
 ## Out of scope unless asked
 
 - `~/code/personal/zmk-keyboard-cornix` (the upstream board module) — read-only
