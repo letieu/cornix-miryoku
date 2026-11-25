@@ -403,9 +403,9 @@
    [
     "KC_NO",
     "KC_NO",
-    "KC_NO",
     "KC_ACL0",
     "KC_ACL1",
+    "KC_ACL2",
     "KC_ACL2",
     -1
    ],

@@ -37,7 +37,7 @@ r3 | ·  ·  ·  ·  ·  ·                                             | KC_ENT
 r0 | ·  QK_BOOT  TO(2)  TO(1)  TO(0)  ·                           | LCTL(KC_LEFT)  LCTL(KC_DOWN)  LCTL(KC_UP)  LCTL(KC_RIGHT)  LGUI(KC_Z)  ·
 r1 | ·  KC_LCTL  KC_LALT  KC_LGUI  KC_LSFT  ·                     | KC_MS_L  KC_MS_D  KC_MS_U  KC_MS_R  ·  ·
 r2 | ·  ·  KC_RALT  TO(8)  TO(5)  ·                               | KC_WH_L  KC_WH_U  KC_WH_D  KC_WH_R  ·  ·
-r3 | ·  ·  ·  KC_ACL0  KC_ACL1  KC_ACL2                           | KC_BTN2  KC_BTN1  KC_BTN3  ·  ·  ·
+r3 | ·  ·  KC_ACL0  KC_ACL1  KC_ACL2  KC_ACL2                     | KC_BTN2  KC_BTN1  KC_BTN3  ·  ·  ·
      encoder push buttons: KC_MUTE / KC_BTN3
 
 === MEDIA (layer 6) ===
@@ -72,14 +72,14 @@ r3 | USER02  ·  ·  KC_APP  KC_SPACE  KC_TAB                       | ·  ·  ·
   combo term                   (id 2 ) = 50
   one-shot timeout             (id 6 ) = 1000
   TAPPING TERM                 (id 7 ) = 200
-  mouse delay                  (id 9 ) = 30
-  mouse interval               (id 10) = 10
-  MOUSE STEP                   (id 11) = 10
-  mouse max speed              (id 12) = 5
-  mouse ticks to max           (id 13) = 20
-  wheel delay                  (id 14) = 50
-  wheel interval               (id 15) = 40
-  wheel ticks to max           (id 17) = 15
+  mouse delay (inert)          (id 9 ) = 30
+  mouse interval (inert)       (id 10) = 10
+  MOUSE STEP (inert)           (id 11) = 10
+  mouse max speed (inert)      (id 12) = 5
+  mouse ticks to max (inert)   (id 13) = 20
+  wheel delay (inert)          (id 14) = 50
+  wheel interval (inert)       (id 15) = 40
+  wheel ticks to max (inert)   (id 17) = 15
   tap code delay               (id 18) = 20
   tap hold caps delay          (id 19) = 20
   PERMISSIVE HOLD              (id 22) = 1

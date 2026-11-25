@@ -61,6 +61,18 @@ HRM_SETTINGS = {
 
 # Mouse-key tuning (RMK MouseKeyConfig defaults are quite slow: 5 px every 20 ms
 # after a 100 ms delay). ids follow the same QMK-settings list as above.
+# Mouse tuning. NOTE: RMK exposes no mouse-key settings over Vial (its Vial
+# `SettingKey` enum only covers combo/morse/oneshot/tap ids), so the .vil mouse
+# settings ids below are inert on this firmware - they are kept for a future RMK
+# build that implements them, and documented as such. The only lever that really
+# changes pointer speed is the ACL key set underneath.
+#
+# RMK mouse defaults: 5 px every 20 ms after a 100 ms delay, ramping to 3x over
+# 50 ticks (~1 s), clamped to 25 px per report. `KC_ACL0/1/2` multiply whatever
+# the ramp produced (0.25x / 0.5x / 2x, highest held key wins):
+#   start 5 px  -> ACL2 10 px, ramp max 15 px -> ACL2 30 px, clamped to 25 px.
+# So holding ACL2 is the "hold to fly" key: 500 px/s at first report, 1250 px/s
+# at full ramp (vs 250 / 750 px/s without it).
 QSID_MOUSE_DELAY = "9"
 QSID_MOUSE_INTERVAL = "10"
 QSID_MOUSE_STEP = "11"
@@ -81,9 +93,19 @@ MOUSE_SETTINGS = {
     QSID_WHEEL_TIME_TO_MAX: 15,
 }
 
-# Speed modifier keys on the MOUSE layer (RMK: ACL2 doubles the step, ACL0 cuts
-# it to roughly a quarter): held with the left thumb while the right hand moves.
-MOUSE_ACCEL_KEYS = {(3, 3): "KC_ACL0", (3, 4): "KC_ACL1", (3, 5): "KC_ACL2"}
+# Speed modifier keys on the MOUSE layer, on the left thumb row. Placement
+# matters: (3,5) is the outer thumb, i.e. the `LT5(KC_TAB)` key that is *held* to
+# activate the MOUSE layer, so a keycode there is never emitted - it must not be
+# the only fast option. The three reachable ones:
+#   (3,4) middle thumb (Space/Nav position) = 2x  -> hold this to move fast
+#   (3,3) inner thumb (Esc/Media position) = 0.5x -> fine positioning
+#   (3,2) inner palm                        = 0.25x -> pixel hunting
+MOUSE_ACCEL_KEYS = {
+    (3, 2): "KC_ACL0",
+    (3, 3): "KC_ACL1",
+    (3, 4): "KC_ACL2",
+    (3, 5): "KC_ACL2",
+}
 
 # Hand edits the user made in Vial / vial.rocks that must survive a regeneration.
 # They are applied on top of the Miryoku layers for both alphas sets, so a fresh

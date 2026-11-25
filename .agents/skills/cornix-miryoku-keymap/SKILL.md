@@ -63,7 +63,7 @@ skill at `~/code/personal/cornix-miryoku`.
 | `--swap gui,ctrl` | swap two modifiers in mod-taps and standalone mods; accepts `gui/ctrl/alt/shift`, `cmd`, `opt`, `l/r` prefixes. Modded shortcuts `LGUI(KC_C)` are never swapped |
 | `--nav vi\|invertedt`, `--mouse vi\|invertedt` | alternate Miryoku nav/mouse layers (`MIRYOKU_NAV_VI` = vim style) |
 | `--hrm-tune` / `--no-hrm-tune` | write the tuned home-row-mod settings (default on) |
-| `--mouse-tune` / `--no-mouse-tune` | write the faster mouse-key settings (delay 30, interval 10, step 10, max speed 5x, wheel 40/50) and put `KC_ACL0/1/2` on the MOUSE layer's left thumbs (default on) |
+| `--mouse-tune` / `--no-mouse-tune` | write the mouse-key settings block (delay 30, interval 10, step 10, max speed 5x, wheel 40/50 — **inert on RMK**, which has no Vial mouse settings) and put `KC_ACL0/1/2` on the MOUSE layer's left thumbs (default on) |
 | `--encoder-clicks KC_MUTE,KC_BTN3` | encoder push buttons on every layer |
 | `--template <vil>` | reuse `uid`, settings, encoders, macros, tap-dance, combos |
 | `-o <out.vil>` | output path |
@@ -97,9 +97,16 @@ those spellings, they are not real changes. Encode the real differences in
 - Layer **numbering matters**: Miryoku's `LT<n>()`/`TO(n)` reference
   `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`.
   Insert/remove a layer and every layer-tap pointer moves.
-- Mouse speed lives in the QMK settings (ids 9-17) **and** in `KC_ACL0/1/2` keys:
-  ACL2 doubles RMK's step, ACL0 cuts it to ~a quarter. If the settings ids are
-  ignored by the firmware build, the ACL keys still work.
+- Mouse speed: RMK implements **no** mouse-key Vial settings — check
+  `rmk-types/src/protocol/vial.rs` `SettingKey`: only `0x02, 0x06, 0x07, 0x12,
+  0x13, 0x16, 0x17, 0x19, 0x1A, 0x1B` exist, which is exactly the settings block
+  a real export contains. Ids 9–17 are therefore inert; RMK's timing is
+  compile-time (`MouseKeyConfig`: 5 px / 20 ms, 3x ramp over 50 ticks, 25 px cap),
+  so only changing them needs a firmware build (out of scope, no flashing).
+- `KC_ACL0/1/2` multiply the ramped step by 0.25x / 0.5x / **2x**, highest held
+  wins. Placement is what matters: the outer left thumb is `LT5(KC_TAB)`, held to
+  activate the MOUSE layer, so whatever keycode sits there never fires. 2x must be
+  the middle thumb (`(3,4)`), 0.5x the inner thumb (`(3,3)`), 0.25x a palm key.
 - `--nav vi` without `--mouse vi` leaves the mouse keys one column outward from
   the arrows (the user noticed immediately); always pass both.
 - Keycode spellings in an export differ from the generator's (`KC_LCTRL` vs

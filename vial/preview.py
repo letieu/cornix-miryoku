@@ -15,11 +15,16 @@ import json
 from pathlib import Path
 
 NAMES = ["BASE", "EXTRA", "TAP", "BUTTON", "NAV", "MOUSE", "MEDIA", "NUM", "SYM", "FUN"]
+# RMK only implements the ids it lists in rmk-types SettingKey (2, 6, 7, 18, 19,
+# 22, 23, 25, 26, 27); the mouse ids are written by the generator for a future
+# build but are no-ops today, hence the marker.
 SETTING_NAMES = {
     "2": "combo term", "6": "one-shot timeout", "7": "TAPPING TERM",
-    "9": "mouse delay", "10": "mouse interval", "11": "MOUSE STEP",
-    "12": "mouse max speed", "13": "mouse ticks to max", "14": "wheel delay",
-    "15": "wheel interval", "16": "wheel max steps", "17": "wheel ticks to max",
+    "9": "mouse delay (inert)", "10": "mouse interval (inert)",
+    "11": "MOUSE STEP (inert)", "12": "mouse max speed (inert)",
+    "13": "mouse ticks to max (inert)", "14": "wheel delay (inert)",
+    "15": "wheel interval (inert)", "16": "wheel max steps (inert)",
+    "17": "wheel ticks to max (inert)",
     "18": "tap code delay", "19": "tap hold caps delay", "22": "PERMISSIVE HOLD",
     "23": "HOLD ON OTHER KEY PRESS", "25": "quick tap term", "26": "CHORDAL HOLD",
     "27": "FLOW TAP",

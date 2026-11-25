@@ -71,12 +71,46 @@ tapping term is still applied.
 
 ## Mouse keys
 
-RMK's stock mouse tuning is slow (5 px per 20 ms after a 100 ms delay), so the
-files carry a faster preset: delay 30 ms, interval 10 ms, step 10 px, top speed
-5x, wheel 50 ms / 40 ms. On the MOUSE layer the three left thumbs switch the
-acceleration level on the fly - `KC_ACL0` (slow) `KC_ACL1` `KC_ACL2` (double
-speed) - which works even if the firmware ignores the settings ids. Disable with
-`--no-mouse-tune`.
+Two different things are at play, and only one of them is configurable from a
+`.vil` on this firmware:
+
+**1. RMK's timing is compile-time and the .vil cannot change it.** RMK exposes no
+mouse-key settings over Vial - its `SettingKey` enum only covers combo, morse,
+one-shot and tap ids (`2, 6, 7, 18, 19, 22, 23, 25, 26, 27`, exactly the ids this
+keyboard reports). The mouse ids (`9`-`17`, delay/interval/step/max speed/ticks to
+max) are still written into the files for a future RMK build, but today they are
+ignored: that is why raising them changed nothing. RMK's fixed defaults are
+
+| | |
+|---|---|
+| initial delay | 100 ms after the key goes down before the pointer moves |
+| repeat interval | 20 ms per report |
+| step | 5 px, accelerating to **3x** after 50 ticks (~1 s of holding) |
+| clamp | 25 px per report |
+
+So "hold and it speeds up" already happens - it just tops out at 750 px/s.
+
+**2. The ACL keys are the lever that works**, and they multiply whatever the ramp
+produced: `KC_ACL0` = 0.25x, `KC_ACL1` = 0.5x, `KC_ACL2` = **2x** (if several are
+held the fastest wins). Held with the left thumb while the right hand steers:
+
+| Key | Keycode | Effect |
+|---|---|---|
+| middle thumb (Space/Nav position) | `KC_ACL2` | 10 px per report at first, 25 px/s clamp at full ramp -> 500 -> 1250 px/s. **Hold this to fly.** |
+| inner thumb (Esc/Media position) | `KC_ACL1` | half speed for fine aiming |
+| inner palm | `KC_ACL0` | quarter speed, pixel hunting |
+| outer thumb (the `LT5(KC_TAB)` key that holds the layer) | `KC_ACL2` | never fires - it is busy holding the layer |
+
+Before this fix the three thumbs were `ACL0/ACL1/ACL2` left to right, which put
+the *only* fast key on the layer-hold thumb: every reachable accel key then made
+the pointer **slower**. That is why the mouse still felt bad after the settings
+bump. `--no-mouse-tune` drops the settings block, the ACL keys and nothing else.
+
+If even 1250 px/s is too slow, the fix has to happen in the firmware
+(`BehaviorConfig::mouse_key`: `repeat_interval_ms` 20 -> 8,
+`move_delta` 5 -> 10, `max_speed` 3 -> 4, `ticks_to_max` 50 -> 15,
+`move_max` 25 -> 60) - that means building and flashing RMK, which is out of
+scope for this repo.
 
 ## Known gaps (nothing fatal, all fixable in the Vial UI)
 

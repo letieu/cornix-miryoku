@@ -37,9 +37,15 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   the MOUSE home row, and `USER00`–`USER02` on the FUN outer column.
   `vial/current.vil` is the export they came from — keep it in sync when the user
   hands over a new one instead of hand-editing a generated `.vil`.
-- **Mouse keys are tuned faster than RMK's defaults** (`--mouse-tune`): delay 40 ms,
-  interval 10 ms, step 10 px, max speed 5x, and the left thumbs on the MOUSE layer
-  hold `KC_ACL0/ACL1/ACL2` so speed can be halved/boosted on the fly.
+- **Mouse keys**: RMK's Vial implementation has **no mouse-key settings** (its
+  `SettingKey` enum stops at combo/morse/tap ids), so ids 9–17 in the `.vil` are
+  inert — the generator still writes them for a future build. The only working
+  lever is `KC_ACL0/1/2` (0.25x / 0.5x / **2x**, highest held wins) and placement
+  matters: the 2x key must **not** be the outer left thumb, because that is the
+  `LT5(KC_TAB)` key held to activate the MOUSE layer and never emits its own
+  keycode. Shipped: middle thumb `KC_ACL2` (hold to fly), inner thumb `KC_ACL1`,
+  inner palm `KC_ACL0`. RMK's fixed timing (5 px / 20 ms, 3x ramp over ~1 s,
+  25 px cap) can only be changed by rebuilding and flashing the firmware.
 - Shortcut combos stay `LGUI(...)` (Cmd+C/X/V/Z) even though the mod positions
   are swapped.
 
