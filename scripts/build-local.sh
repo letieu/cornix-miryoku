@@ -90,5 +90,5 @@ for t in "${TARGETS[@]}"; do
 done
 
 echo
-echo "== UF2 files (double-tap RESET, drag onto the NICENANO volume):"
+echo "== UF2 files (double-tap RESET, drag onto the \`cornix\` volume, or use scripts/flash-uf2-raw.sh):"
 ls -1 "$WS"/build/*/zephyr/zmk.uf2 2>/dev/null || true
