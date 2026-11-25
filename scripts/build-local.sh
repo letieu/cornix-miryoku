@@ -29,6 +29,19 @@ if ! command -v west >/dev/null 2>&1; then
   exit 1
 fi
 
+# ZMK's CI image is built with Zephyr SDK 0.16.x; 0.17.x ships a picolibc whose
+# sys/lock.h collides with Zephyr 4.1's picolibc glue
+# ("conflicting types for '__lock___libc_recursive_mutex'"). Use a local 0.16.9
+# unless the caller pinned something else.
+if [ -z "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  for d in "$HOME"/zephyr-sdk-0.16.*; do
+    [ -d "$d" ] && export ZEPHYR_SDK_INSTALL_DIR="$d" && break
+  done
+fi
+if [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  echo "using Zephyr SDK: $ZEPHYR_SDK_INSTALL_DIR"
+fi
+
 mkdir -p "$WS"
 cd "$WS"
 
