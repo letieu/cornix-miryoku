@@ -79,9 +79,10 @@ Anything the user changed by hand in Vial or vial.rocks is recorded in the
 `USER_PATCHES` dict in `make_miryoku_vil.py` (`{layer name: {(row, col): keycode}}`)
 and applied on top of every generated layer, for all alphas sets. Currently:
 BASE `(0,0)=SGUI(KC_4)` screenshot, `(3,0)=LALT(KC_Z)`; NAV `(5,1)=KC_NO`
-(caps word); MOUSE top row `LCTL(KC_LEFT/UP/DOWN/RIGHT)`, home row scroll
-`KC_WH_D`/`KC_WH_U` flipped; MEDIA `RGB_*` blanked; FUN outer column
-`USER00`–`USER02`.
+(caps word); NAV+MOUSE `(1,5)=LGUI(KC_LBRC)` / `(2,5)=LGUI(KC_RBRC)` (browser
+back/forward on the free left inner-index cells); MOUSE top row
+`LCTL(KC_LEFT/UP/DOWN/RIGHT)`, home row scroll `KC_WH_D`/`KC_WH_U` flipped;
+MEDIA `RGB_*` blanked; FUN outer column `USER00`–`USER02`.
 
 When the user hands over a fresh export (`vial/current.vil` or a `~/Downloads`
 file), diff it against the generated file **after normalising keycode aliases**
@@ -97,12 +98,19 @@ those spellings, they are not real changes. Encode the real differences in
 - Layer **numbering matters**: Miryoku's `LT<n>()`/`TO(n)` reference
   `0 BASE, 1 EXTRA, 2 TAP, 3 BUTTON, 4 NAV, 5 MOUSE, 6 MEDIA, 7 NUM, 8 SYM, 9 FUN`.
   Insert/remove a layer and every layer-tap pointer moves.
-- Mouse speed: RMK implements **no** mouse-key Vial settings — check
+- Mouse speed: RMK implements **no** mouse-key Vial settings - check
   `rmk-types/src/protocol/vial.rs` `SettingKey`: only `0x02, 0x06, 0x07, 0x12,
   0x13, 0x16, 0x17, 0x19, 0x1A, 0x1B` exist, which is exactly the settings block
   a real export contains. Ids 9–17 are therefore inert; RMK's timing is
-  compile-time (`MouseKeyConfig`: 5 px / 20 ms, 3x ramp over 50 ticks, 25 px cap),
-  so only changing them needs a firmware build (out of scope, no flashing).
+  compile-time (`MouseKeyConfig`: wheel 1 unit every 80 ms, +100 ms first delay,
+  ramp to 2 units over ~3.2 s), so only changing them needs a firmware build
+  (out of scope, no flashing).
+- ZMK scroll (the active firmware): `&msc`'s parameter is a **rate** in wheel
+  detents per second, emitted as `SCRL_VAL * trigger-period-ms / 1000` per tick
+  with a carried fraction. Upstream `ZMK_POINTING_DEFAULT_SCRL_VAL 10` = one
+  notch per 100 ms and *nothing* for a shorter tap - that is the "scroll is slow
+  and laggy" report. Shipped 40; keep `acceleration-exponent = 0` on `&msc`,
+  any ramp starts below one detent and eats short presses.
 - `KC_ACL0/1/2` multiply the ramped step by 0.25x / 0.5x / **2x**, highest held
   wins. Placement is what matters: the outer left thumb is `LT5(KC_TAB)`, held to
   activate the MOUSE layer, so whatever keycode sits there never fires. 2x must be

@@ -117,6 +117,12 @@ USER_PATCHES = {
     },
     "NAV": {
         (5, 1): "KC_NO",           # CW_TOGG cleared: caps-word is not used
+        # Browser history on the free left inner-index cells (col 5 home and
+        # bottom row), so back/forward is one reachable key on a held layer
+        # instead of the trackpad's three-finger swipe. Cmd+[ / Cmd+] is back /
+        # forward in Safari, Chrome and Firefox on macOS.
+        (1, 5): "LGUI(KC_LBRC)",   # Cmd+[  back
+        (2, 5): "LGUI(KC_RBRC)",   # Cmd+]  forward
     },
     "MOUSE": {
         # clipboard slots replaced by the macOS Ctrl+arrow window/space keys
@@ -127,6 +133,9 @@ USER_PATCHES = {
         # scroll direction flipped (natural scrolling)
         (6, 3): "KC_WH_D",
         (6, 4): "KC_WH_U",
+        # same free cells as NAV: history while the mouse layer is held
+        (1, 5): "LGUI(KC_LBRC)",   # Cmd+[  back
+        (2, 5): "LGUI(KC_RBRC)",   # Cmd+]  forward
     },
     "MEDIA": {
         # RGB keys are no-ops on this RMK build, so they were blanked in Vial

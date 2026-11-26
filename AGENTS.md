@@ -39,7 +39,9 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   `SGUI(KC_4)` and `LALT(KC_Z)` on the left outer column/palm, `CW_TOGG` and the
   MEDIA `RGB_*` keys blanked, `LCTL(KC_LEFT/UP/DOWN/RIGHT)` on the MOUSE layer's
   top row (macOS window keys instead of clipboard), scroll direction flipped on
-  the MOUSE home row, and `USER00`–`USER02` on the FUN outer column.
+  the MOUSE home row, `LGUI(KC_LBRC)`/`LGUI(KC_RBRC)` (browser back/forward) on
+  the free left inner-index cells `(1,5)`/`(2,5)` of NAV and MOUSE, and
+  `USER00`–`USER02` on the FUN outer column.
   `vial/current.vil` is the export they came from — keep it in sync when the user
   hands over a new one instead of hand-editing a generated `.vil`.
 - **Mouse keys**: RMK's Vial implementation has **no mouse-key settings** (its
@@ -84,7 +86,13 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   `&none`; mouse speed is `ZMK_POINTING_DEFAULT_MOVE_VAL` (**2400 px/s**, defined
   at the top of `config/cornix.keymap` - ZMK's default 600 was what made the
   pointer feel sluggish) plus the `&mmv` override in the same file (exponent 1,
-  200 ms ramp, 8 ms reports).
+  200 ms ramp, 8 ms reports). Scroll is `ZMK_POINTING_DEFAULT_SCRL_VAL` (**40**).
+  Both macros are **rates**, not steps: `&msc` emits `SCRL_VAL * 16 / 1000`
+  detents per tick, so upstream's 10 meant one notch every 100 ms (and nothing
+  at all for a short tap) - that is the "scroll works but is slow and laggy"
+  complaint. `&msc` also gets `acceleration-exponent = 0` + `delay-ms = 0` so the
+  first tick already carries a notch; do not put a ramp on the wheel, it
+  swallows taps.
 - `config/cornix.keymap` owns the `keymap` node itself (no `miryoku.dtsi`): the
   layers come from `scripts/gen_zmk_keys.py` and each layer carries
   `sensor-bindings`, which Miryoku's node cannot provide - without it the rotary

@@ -51,6 +51,23 @@ To drop the outer pinkie column instead, move the `XXX` placeholders in
 `config/includes/miryoku_cornix.h` to the start of the left rows and the end of
 the right rows.
 
+### Browser back / forward (replaces the three-finger swipe)
+
+On the **NAV** and **MOUSE** layers the two free left cells of the inner column
+(`(1,5)` home row, `(2,5)` bottom row - the inner neighbour of the left index)
+are `Cmd+[` = **back** and `Cmd+]` = **forward**, the shortcuts Safari, Chrome
+and Firefox all use on macOS. Hold the NAV thumb (`LT4(SPACE)`) or the MOUSE
+thumb (`LT5(TAB)`) and the left inner-index finger goes back/forward with one
+keypress - no trackpad, no mouse. They come from `USER_PATCHES` in
+`vial/make_miryoku_vil.py`, so the `.vil` (Vial/RMK path) carries them too.
+
+```
+   NAV / MOUSE, left half
+   r0 | ·   QK_BOOT  TO(2)    TO(1)    TO(0)   ·
+   r1 | ·   KC_LCTL  KC_LALT  KC_LGUI  KC_LSFT  Cmd+[   <- back
+   r2 | ·   ·        RALT     TO(7/8)  TO(4/5)  Cmd+]   <- forward
+```
+
 ## Vial / no-flash option
 
 If the keyboard is still on the stock **RMK + Vial** firmware you do not need
@@ -84,11 +101,19 @@ is what the earlier builds actually ran - the 1250 in old notes came from
 slower than a real mouse, so pointing felt sluggish no matter what the `&mmv`
 ramp was set to. Shipped: **2400 px/s** (`#define
 ZMK_POINTING_DEFAULT_MOVE_VAL 2400`) - a 60 ms tap travels ~100 px, a hold
-reaches full speed in 200 ms. Scroll stays at upstream's 10 units.
+reaches full speed in 200 ms.
 
-To try a different feel, change those two macros (`2400`, and optionally
-`ZMK_POINTING_DEFAULT_SCRL_VAL`) and rebuild; no behaviour in the keymap needs
-touching. Remember the ceiling applies to every `&mmv` key in the layer, since
+Scroll is tuned separately, because `&msc` takes its value as a **rate**, not a
+step: it emits `SCRL_VAL * trigger-period-ms / 1000` wheel detents per 16 ms tick
+and carries the fraction over. Upstream's `ZMK_POINTING_DEFAULT_SCRL_VAL 10`
+therefore means *one notch every 100 ms* - and a tap shorter than 100 ms scrolls
+nothing at all, which is why the MOUSE layer's scroll keys felt slow and laggy
+while still "working". Shipped: **40** (one notch per 25 ms, ~40 notches/s held)
+with `&msc { acceleration-exponent = <0>; delay-ms = <0> }` so the very first
+tick already carries a usable fraction. 20 = gentle, 80 = fast.
+
+To try a different feel, change those two macros (`2400`, `40`) and rebuild; no
+behaviour in the keymap needs touching. Remember the ceiling applies to every `&mmv` key in the layer, since
 they all share those `MOVE_*` bindings.
 
 Trade-off against the Vial path: every mouse tweak here means a rebuild plus a

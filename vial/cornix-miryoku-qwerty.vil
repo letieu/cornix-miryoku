@@ -314,7 +314,7 @@
     "KC_LALT",
     "KC_LGUI",
     "KC_LSFT",
-    "KC_NO",
+    "LGUI(KC_LBRC)",
     -1
    ],
    [
@@ -323,7 +323,7 @@
     "KC_RALT",
     "TO(7)",
     "TO(4)",
-    "KC_NO",
+    "LGUI(KC_RBRC)",
     "KC_MUTE"
    ],
    [
@@ -388,7 +388,7 @@
     "KC_LALT",
     "KC_LGUI",
     "KC_LSFT",
-    "KC_NO",
+    "LGUI(KC_LBRC)",
     -1
    ],
    [
@@ -397,7 +397,7 @@
     "KC_RALT",
     "TO(8)",
     "TO(5)",
-    "KC_NO",
+    "LGUI(KC_RBRC)",
     "KC_MUTE"
    ],
    [

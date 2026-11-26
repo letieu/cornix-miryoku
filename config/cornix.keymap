@@ -20,9 +20,19 @@
 // sluggish. 2400 px/s (4x upstream) with a 200 ms ramp: a 60 ms tap still only
 // travels ~100 px (fine aiming), a longer hold ends up at full speed.
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 2400
-// Scroll stays at upstream's 10 units: raising it makes the wheel jumpy in
-// macOS. Bump to 20 here if the wheel itself ever feels slow.
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 10
+//
+// Scroll is a *rate*, not a step: `&msc` emits SCRL_VAL * trigger-period-ms /
+// 1000 wheel detents per tick (16 ms) and carries the fraction to the next
+// tick. Upstream's 10 therefore means "one notch every 100 ms" - and any tap
+// shorter than 100 ms scrolls nothing at all. That is exactly the "slow and
+// laggy" MOUSE layer: ~10 notches/s at best, in 100 ms lumps.
+//
+//   10 -> 1 notch / 100 ms (upstream, unusable)   40 -> 1 notch / 25 ms
+//   20 -> 1 notch / 50 ms                         80 -> 1 notch / 12 ms
+//
+// 40 keeps a short tap worth a full notch while a held key reaches ~40
+// notches/s (~2000 px/s at macOS's default 3 lines per notch).
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 40
 
 #include <behaviors.dtsi>
 #include <behaviors/mouse_keys.dtsi>
@@ -161,4 +171,16 @@
   time-to-max-speed-ms = <200>;
   delay-ms = <0>;
   trigger-period-ms = <8>;
+};
+
+// Wheel feel: exponent 0 keeps the speed constant, so the very first tick
+// already carries SCRL_VAL/62.5 of a notch instead of starting from zero -
+// with an acceleration ramp the first ~100 ms of a press would stay below one
+// detent and the scroll would feel dead. 16 ms ticks (the &msc default) are
+// plenty: macOS smooths discrete wheel notches itself.
+&msc {
+  acceleration-exponent = <0>;
+  time-to-max-speed-ms = <0>;
+  delay-ms = <0>;
+  trigger-period-ms = <16>;
 };

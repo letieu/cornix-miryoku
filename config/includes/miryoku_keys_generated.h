@@ -61,9 +61,9 @@
 #define MIRYOKU_LAYER_NAV \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
   &kp LG(LS(Z)), &kp LG(V), &kp LG(C), &kp LG(X), &kp LG(Z),              \
-  &kp LCTL, &kp LALT, &kp LGUI, &kp LSFT, &none,                          \
+  &kp LCTL, &kp LALT, &kp LGUI, &kp LSFT, &kp LG(LBKT),                   \
   &kp LEFT, &kp DOWN, &kp UP, &kp RIGHT, &none,                           \
-  &none, &kp RALT, &to 7, &to 4, &none,                                   \
+  &none, &kp RALT, &to 7, &to 4, &kp LG(RBKT),                            \
   &kp HOME, &kp PG_DN, &kp PG_UP, &kp END, &kp INS,                       \
   &none, &none, &none, &none, &none,                                      \
   &kp RET, &kp BSPC, &kp DEL, &none, &none,                               \
@@ -74,9 +74,9 @@
 #define MIRYOKU_LAYER_MOUSE \
   &bootloader, &to 2, &to 1, &to 0, &none,                                \
   &kp LC(LEFT), &kp LC(DOWN), &kp LC(UP), &kp LC(RIGHT), &kp LG(Z),       \
-  &kp LCTL, &kp LALT, &kp LGUI, &kp LSFT, &none,                          \
+  &kp LCTL, &kp LALT, &kp LGUI, &kp LSFT, &kp LG(LBKT),                   \
   &mmv MOVE_LEFT, &mmv MOVE_DOWN, &mmv MOVE_UP, &mmv MOVE_RIGHT, &none,   \
-  &none, &kp RALT, &to 8, &to 5, &none,                                   \
+  &none, &kp RALT, &to 8, &to 5, &kp LG(RBKT),                            \
   &msc SCRL_LEFT, &msc SCRL_UP, &msc SCRL_DOWN, &msc SCRL_RIGHT, &none,   \
   &none, &none, &none, &none, &none,                                      \
   &mkp MB2, &mkp MB1, &mkp MB3, &none, &none,                             \
