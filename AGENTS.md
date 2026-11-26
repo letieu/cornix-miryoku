@@ -81,8 +81,10 @@ changes) and the human docs in `README.md`, `vial/README.md`.
   hand-edit the generated header; edit the `.vil` (or `USER_PATCHES`) and
   regenerate. `--vil <file> -o <header>` switches alphas.
 - ZMK has no equivalent for RMK's `KC_ACL*` and `USERnn`, so those become
-  `&none`; mouse speed is `ZMK_POINTING_DEFAULT_MOVE_VAL` (1250 px/s) plus the
-  `&mmv` override in `config/cornix.keymap` (300 ms ramp, 8 ms reports).
+  `&none`; mouse speed is `ZMK_POINTING_DEFAULT_MOVE_VAL` (**2400 px/s**, defined
+  at the top of `config/cornix.keymap` - ZMK's default 600 was what made the
+  pointer feel sluggish) plus the `&mmv` override in the same file (exponent 1,
+  200 ms ramp, 8 ms reports).
 - `config/cornix.keymap` owns the `keymap` node itself (no `miryoku.dtsi`): the
   layers come from `scripts/gen_zmk_keys.py` and each layer carries
   `sensor-bindings`, which Miryoku's node cannot provide - without it the rotary

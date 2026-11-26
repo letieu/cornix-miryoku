@@ -64,21 +64,32 @@ Miryoku's MOUSE layer is built on ZMK's pointing behaviors, which are only
 compiled in with `CONFIG_ZMK_POINTING=y` - `config/cornix.conf` and
 `config/cornix_dongle_adapter.conf` enable it. Without them the layer is dead.
 
-Speed is a first-class setting in ZMK (`zmk,behavior-input-two-axis`), overridden
-at the end of `config/cornix.keymap`:
+Speed is a first-class setting in ZMK (`zmk,behavior-input-two-axis`): the
+`&mmv` timing override at the end of `config/cornix.keymap`, plus the
+`ZMK_POINTING_DEFAULT_MOVE_VAL` ceiling (2400 px/s, defined at the top of the
+same file because the binding parameter *is* the max speed):
 
 | Property | ZMK default | Miryoku | Shipped here |
 |---|---|---|---|
 | `acceleration-exponent` | 1 | 1 | **1** (0 = constant, 2 = jerk) |
-| `time-to-max-speed-ms` | 300 | **1500** | **300** - full speed after 0.3 s |
+| `time-to-max-speed-ms` | 300 | **1500** | **200** - full speed after 0.2 s |
 | `delay-ms` | – | 0 | **0** |
 | `trigger-period-ms` | 16 | 16 | **8** - ~125 reports/s |
 
-Max speed is the binding value: Miryoku sets `ZMK_POINTING_DEFAULT_MOVE_VAL`
-to **1250 px/s** (scroll 100), which is already ~1.7x what the RMK firmware does
-without an `ACL2` key held. To go beyond that you need your own behavior with a
-bigger value - the commented example at the bottom of `config/cornix.keymap`
-shows how.
+Max speed is the *binding value*: `MOVE_UP` expands to
+`MOVE_Y(-ZMK_POINTING_DEFAULT_MOVE_VAL)`, so the ceiling comes from that macro
+at the top of `config/cornix.keymap`. ZMK's own default is **600 px/s** and that
+is what the earlier builds actually ran - the 1250 in old notes came from
+`miryoku_zmk`, which `config/west.yml` no longer pulls in. 600 px/s is ~4x
+slower than a real mouse, so pointing felt sluggish no matter what the `&mmv`
+ramp was set to. Shipped: **2400 px/s** (`#define
+ZMK_POINTING_DEFAULT_MOVE_VAL 2400`) - a 60 ms tap travels ~100 px, a hold
+reaches full speed in 200 ms. Scroll stays at upstream's 10 units.
+
+To try a different feel, change those two macros (`2400`, and optionally
+`ZMK_POINTING_DEFAULT_SCRL_VAL`) and rebuild; no behaviour in the keymap needs
+touching. Remember the ceiling applies to every `&mmv` key in the layer, since
+they all share those `MOVE_*` bindings.
 
 Trade-off against the Vial path: every mouse tweak here means a rebuild plus a
 flash of both halves (or the dongle), whereas the `.vil` route is instant but

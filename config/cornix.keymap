@@ -8,6 +8,22 @@
 // rotary encoders do nothing. Everything else (behaviors, pointing, bluetooth)
 // comes from ZMK directly, so the file is self-contained.
 
+// ---------------------------------------------------------------------------
+// Pointer speed. ZMK takes the *speed ceiling* from the binding parameter
+// (`MOVE_UP` is `MOVE_Y(-ZMK_POINTING_DEFAULT_MOVE_VAL)`) and ramps from 0 up
+// to it, so the only real knob is these two macros - they must be defined
+// before <dt-bindings/zmk/pointing.h> is pulled in below.
+//
+// Upstream's default is 600 px/s, and that is all this build had: the 1250 in
+// the older docs came from miryoku_zmk, which config/west.yml no longer pulls
+// in. 600 px/s is ~4x slower than a real mouse, which is why pointing felt
+// sluggish. 2400 px/s (4x upstream) with a 200 ms ramp: a 60 ms tap still only
+// travels ~100 px (fine aiming), a longer hold ends up at full speed.
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2400
+// Scroll stays at upstream's 10 units: raising it makes the wheel jumpy in
+// macOS. Bump to 20 here if the wheel itself ever feels slow.
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 10
+
 #include <behaviors.dtsi>
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/keys.h>
@@ -137,10 +153,12 @@
   require-prior-idle-ms = <150>;
 };
 
-// Pointer feel: reach full speed in 300 ms instead of 1500 ms, report every 8 ms.
+// Pointer feel: linear ramp to full speed in 200 ms, one report every 8 ms
+// (~125 Hz), no start delay. `acceleration-exponent = 0` would give constant
+// speed (predictable but coarse); keep 1 so short taps stay slow/accurate.
 &mmv {
   acceleration-exponent = <1>;
-  time-to-max-speed-ms = <300>;
+  time-to-max-speed-ms = <200>;
   delay-ms = <0>;
   trigger-period-ms = <8>;
 };
