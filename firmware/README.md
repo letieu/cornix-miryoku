@@ -23,7 +23,7 @@ like the stock RMK firmware.
 
 | | |
 |---|---|
-| repo commit | `03a5bea` (see `git log -- firmware/`) |
+| repo commit | `aefc946` (see `git log -- firmware/`) |
 | ZMK revision | `main` |
 | Zephyr | 4.1.0 |
 | Zephyr SDK | 0.16.9 (`arm-zephyr-eabi`) |
