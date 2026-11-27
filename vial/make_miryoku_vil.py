@@ -175,8 +175,9 @@ KEYS = {
     "SQT": "KC_QUOTE", "SEMI": "KC_SCOLON", "COMMA": "KC_COMMA",
     "DOT": "KC_DOT", "SLASH": "KC_SLASH", "BSLH": "KC_BSLASH",
     "GRAVE": "KC_GRAVE", "EQUAL": "KC_EQUAL", "MINUS": "KC_MINUS",
+    # Careful: ZMK's LBRC/RBRC are *braces* { }, LBKT/RBKT are brackets [ ].
     "LBKT": "KC_LBRC", "RBKT": "KC_RBRC",
-    "LBRC": "KC_LBRC", "RBRC": "KC_RBRC",
+    "LBRC": "KC_LCBR", "RBRC": "KC_RCBR",
     # shifted symbols: no dedicated Vial/qmk name in this set
     "AMPS": "LSFT(KC_7)", "ASTRK": "LSFT(KC_8)", "LPAR": "LSFT(KC_9)",
     "RPAR": "LSFT(KC_0)", "EXCL": "LSFT(KC_1)", "AT": "LSFT(KC_2)",

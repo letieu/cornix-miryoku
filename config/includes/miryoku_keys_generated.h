@@ -111,7 +111,7 @@
   &ind_con, &none, &none, &none                                           
 
 #define MIRYOKU_LAYER_SYM \
-  &kp LBKT, &kp LS(N7), &kp LS(N8), &kp LS(N9), &kp RBKT,                 \
+  &kp LBRC, &kp LS(N7), &kp LS(N8), &kp LS(N9), &kp RBRC,                 \
   &none, &to 0, &to 1, &to 2, &bootloader,                                \
   &kp LS(SEMI), &kp LS(N4), &kp LS(N5), &kp LS(N6), &kp LS(EQUAL),        \
   &none, &kp LSFT, &kp LGUI, &kp LALT, &kp LCTL,                          \

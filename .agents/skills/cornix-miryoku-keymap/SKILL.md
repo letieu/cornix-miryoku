@@ -120,6 +120,13 @@ those spellings, they are not real changes. Encode the real differences in
 - Keycode spellings in an export differ from the generator's (`KC_LCTRL` vs
   `KC_LCTL`, `SGUI(Z)` vs `LGUI(LSFT(KC_Z))`); normalise before diffing, then put
   real changes into `USER_PATCHES`.
+- **ZMK `LBRC`/`RBRC` are braces `{` `}`; `LBKT`/`RBKT` are brackets `[` `]`.**
+  Miryoku's SYM layer uses `LBRC`/`RBRC`, and mapping those onto QMK
+  `KC_LBRC`/`KC_RBRC` (as the generator did) makes SYM a second NUM row, so
+  `{`/`}` become untypable while `[`/`]` show up twice. The QMK names are
+  `KC_LCBR`/`KC_RCBR`; `scripts/gen_zmk_keys.py` must map them back to
+  `LBRC`/`RBRC`, not `LBKT`/`RBKT`. Check with `preview.py --layer 8`:
+  NUM row 0 = `[ 7 8 9 ]`, SYM row 0 = `{ & * ( }`.
 - `USER00`–`USER31` (Vial's Custom section) and `SGUI(...)` are accepted by the
   validator; add new wrapper families there if a patch uses them.
 - The dead column is **deliberate** (user preference, outer columns). Do not

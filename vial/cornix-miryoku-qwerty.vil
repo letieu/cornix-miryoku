@@ -597,11 +597,11 @@
   [
    [
     "KC_NO",
-    "KC_LBRC",
+    "KC_LCBR",
     "LSFT(KC_7)",
     "LSFT(KC_8)",
     "LSFT(KC_9)",
-    "KC_RBRC",
+    "KC_RCBR",
     -1
    ],
    [
