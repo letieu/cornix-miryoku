@@ -1,8 +1,23 @@
 # Miryoku for the Cornix
 
+![The Cornix split keyboard, two halves with rotary encoders](images/cornix-photo.webp)
+
+*A Cornix build - two halves, an encoder on each, three thumb keys per side.
+That one is the older 4-row/54-key revision; the layout in this repo targets the
+current 3-row board (50 keys). Photo from an eBay listing.*
+
 ZMK firmware that puts the [Miryoku](https://github.com/manna-harbour/miryoku)
 layout on the Cornix (`jzf/cornix_*` boards from
 [hitsmaxft/zmk-keyboard-cornix](https://github.com/hitsmaxft/zmk-keyboard-cornix)).
+
+![The shipped QWERTY base layer on the Cornix](images/cornix-base-layer.png)
+
+*The shipped base layer (`vial/cornix-miryoku-qwerty.vil`): letters on the keys;
+the ⌃ ⌥ ⌘ ⇧ above them are home-row mods (`LCTL_T`, `LALT_T`, `LGUI_T`,
+`LSFT_T` - Cmd/Ctrl swapped for macOS); `L3`-`L9` are layer taps on the thumbs.
+Drawn by `scripts/render_board.py` from the board's own key geometry (stagger,
+12/23 degree thumbs and inner keys are exact); `--vil <file>` puts any keymap on
+the caps.*
 
 ## Agent / automation notes
 
@@ -19,6 +34,8 @@ prints the whole layout as a keyboard picture without needing Vial.
 
 | File | Purpose |
 |---|---|
+| `images/` | Pictures: `cornix-photo.webp` (a Cornix build), `cornix-board.png` (drawn geometry), `cornix-base-layer.png` (base layer on the caps) |
+| `scripts/render_board.py` | Draws those pictures from the board geometry (vendored as `scripts/cornix_layout50.json`); `--vil <file>` prints a keymap onto the caps |
 | `config/cornix.keymap` | Self-contained keymap: generated layers, HRMs, mouse speed, encoders |
 | `config/includes/miryoku_cornix.h` | Maps Miryoku's 36 keys onto the Cornix 50-position transform (outer columns dead) |
 | `config/includes/miryoku_keys_generated.h` | **Generated** layer contents from `vial/cornix-miryoku-qwerty.vil` - do not edit by hand |
@@ -35,6 +52,11 @@ prints the whole layout as a keyboard picture without needing Vial.
 | `config/cornix.conf` | Kconfig: pointing + ZMK Studio |
 
 ## Mapping notes
+
+![Cornix key geometry without legends](images/cornix-board.png)
+
+3x6 main keys per half (column-staggered, 0.25u/0.3u row offsets), three thumb
+keys at 12 and 23 degrees, plus one inner key next to each half's centre column.
 
 Miryoku uses 5 columns per hand; the Cornix has 6, so the **outermost** column of
 each half is `&none` (same as the Vial layout - keep it that way), plus the two

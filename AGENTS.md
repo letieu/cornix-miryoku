@@ -73,7 +73,12 @@ changes) and the human docs in `README.md`, `vial/README.md`.
    against `vial/vial_names.txt`; do not bypass it).
 6. Keep the shipped filenames: `vial/cornix-miryoku-qwerty.vil` and
    `vial/cornix-miryoku-colemakdh.vil`. Commit changes to this repo.
-7. Sanity-check the symbol layers by eye: NUM row 0 must read `[ 7 8 9 ]` and SYM
+7. README pictures come from `scripts/render_board.py` (geometry vendored in
+   `scripts/cornix_layout50.json` from the board module's `LAYOUT_50`). After a
+   keymap change run `python3 scripts/render_board.py --vil
+   vial/cornix-miryoku-qwerty.vil --out images/cornix-base-layer.png` so the
+   picture in the README keeps matching the `.vil`.
+8. Sanity-check the symbol layers by eye: NUM row 0 must read `[ 7 8 9 ]` and SYM
    row 0 `{ & * ( }`. ZMK's `LBRC`/`RBRC` mean **braces**, `LBKT`/`RBKT` mean
    brackets; mapping Miryoku's `LBRC` to QMK `KC_LBRC` (instead of `KC_LCBR`)
    duplicated the brackets on SYM and left `{`/`}` untypeable.
